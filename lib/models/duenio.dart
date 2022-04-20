@@ -61,9 +61,6 @@ String userToJson(Duenio data) => json.encode(data.toJson());
 class Duenio {
   String idDuenio;
     String nombre;
-    String dpi;
-    String nit;
-    String telefono;
     String correoo;
 
   /* 
@@ -76,9 +73,6 @@ class Duenio {
   Duenio({
         this.idDuenio,
         this.nombre,
-        this.dpi,
-        this.nit,
-        this.telefono,
         this.correoo,
     });
 
@@ -88,9 +82,6 @@ class Duenio {
   factory Duenio.fromJson(Map<String, dynamic> json) => Duenio(
    idDuenio: json["id_duenio"],
         nombre: json["nombre"],
-        dpi: json["dpi"],
-        nit: json["nit"],
-        telefono: json["telefono"],
         correoo: json["correoo"],
       );
 
@@ -99,9 +90,6 @@ class Duenio {
   Map<String, dynamic> toJson() => {
         "id_duenio": idDuenio,
         "nombre": nombre,
-        "dpi": dpi,
-        "nit": nit,
-        "telefono": telefono,
         "correoo": correoo,
       };
 }

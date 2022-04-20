@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkline/models/models.dart';
 import 'package:parkline/services/services.dart';
 import 'package:parkline/screens/parking_point_details_screen.dart';
+import 'package:parkline/services/slots_service.dart';
 import 'package:provider/provider.dart';
 import 'package:parkline/helpers/helpers.dart';
 import 'package:parkline/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
@@ -117,6 +118,11 @@ class _MapMarkersState extends State<MapMarkers> {
   Set<Marker> getmarkers() {
     final parqueosService = Provider.of<ParqueosService>(context);
     final ParqueosProvider parqueosProvider = new ParqueosProvider();
+
+                         final slotsService = Provider.of<SlotsService>(context);
+
+                    //     print(slotsService.slots);
+
 
     //markers to place on map
     setState(() {

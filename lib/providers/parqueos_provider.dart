@@ -33,7 +33,7 @@ class ParqueosProvider {
       print(data);
 
       Parqueo parqueo = Parqueo.fromJsonList(data);
-      print(parqueo.toList);
+    //  print(parqueo.toList);
       return parqueo.toList;
     } catch (e) {
       print('Error: $e');

@@ -136,7 +136,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                                   Parqueo elparqueo = Parqueo.fromJson(
                                       await _sharedPref.read('user') ?? {});
 
-                                  print('Parqueo: ${elparqueo.toJson()}');
+                                 // print('Parqueo: ${elparqueo.toJson()}');
 
                                   if (elparqueo?.idParqueo != null) {
 

@@ -331,7 +331,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                 
               } else {
-                NotificationsService.showSnackbar("Correo o Contrasenia no coinciden");
+                NotificationsService.showSnackbar("Correo o Contraseña no coinciden");
               }
             },
           ),

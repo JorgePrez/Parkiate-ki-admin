@@ -3,6 +3,7 @@ import 'package:parkline/screens/auth/sign_in_screen.dart';
 import 'package:parkline/screens/auth/sign_up_screen.dart';
 import 'package:parkline/screens/splash_screen.dart';
 import 'package:parkline/services/services.dart';
+import 'package:parkline/services/slots_service.dart';
 import 'package:parkline/utils/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,11 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ParqueosService()),
+        ChangeNotifierProvider(create: (_) => ParqueosService(),),
+
+              ChangeNotifierProvider(create: (_) => SlotsService(),lazy: false,),
+
+
         ChangeNotifierProvider(
             create: (_) =>
                 AuthService()), //tengo roda la informacion de mi auth service en cualquier parte

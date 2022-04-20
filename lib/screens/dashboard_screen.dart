@@ -9,7 +9,9 @@ import 'package:parkline/models/resenia.dart';
 import 'package:parkline/models/parqueo.dart';
 import 'package:parkline/providers/slots_provider.dart';
 import 'package:parkline/screens/choose_slot_screen.dart';
+import 'package:parkline/screens/choose_slot_screen_test.dart';
 import 'package:parkline/screens/dashboard/scan_qr_screen.dart';
+import 'package:parkline/services/slots_service.dart';
 import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/utils/custom_style.dart';
 import 'package:parkline/utils/colors.dart';
@@ -25,6 +27,8 @@ import 'package:parkline/providers/serviciosadmin_provider.dart';
 
 import 'package:parkline/screens/onboard/on_board_screen.dart';
 import 'package:parkline/pages/map_markers.dart';
+import 'package:provider/provider.dart';
+
 
 
 
@@ -138,6 +142,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
         final ReseniasProvider reseniasProvider = new ReseniasProvider();
     final ParqueosProvider parqueosProvider = new ParqueosProvider();
+
+     final slotsService = Provider.of<SlotsService>(context);
+
+                   //      print(slotsService.slots);
+
 
     return SafeArea(
 
@@ -520,20 +529,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                      Navigator.of(context).pop();
 
 
-                  final SlotsProvider slotsProvider = new SlotsProvider();
+                     
 
 
-                  Parkingslots actual = await slotsProvider.buscar();
+              /*    final SlotsProvider slotsProvider = new SlotsProvider();*/
+
+  //  final parqueosService = Provider.of<ParqueosService>(context);
+
+/*
+                  Parkingslots actual = await slotsProvider.buscar();*/
 
 
                      //TODO: debe recibir una lista, y en base a esa liata construye lso espacios
                      //POR EL MOMENTO NO EXISTE
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ChooseSlotScreen(p1: actual.p1 ,
-                                                               p2: actual.p2,
-                                                              p3: actual.p3 ,
-                                                              p4: actual.p4 ,
-                                                              p5: actual.p5)));
+                 /*   Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ChooseSlotScreenTest(
+                          
+/*
+                          p1: true ,
+                        p2: false,
+                          p3: false ,
+                          p4: true ,
+                          p5: true
+                          */
+                          )));*/
 
                     // Navigator.of(context).pop();
                   },
