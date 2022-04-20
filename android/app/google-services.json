@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "197500439022",
+    "firebase_url": "https://parkiate-ki-default-rtdb.firebaseio.com",
+    "project_id": "parkiate-ki",
+    "storage_bucket": "parkiate-ki.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197500439022:android:7ceeb632a5256b301f26ff",
+        "android_client_info": {
+          "package_name": "com.example.parkiateki"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197500439022-digcfpk57sjtlp2aems40v603ju28k3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLcyjmlR5CxmYrYjTJq39q4GleeMrodC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197500439022-digcfpk57sjtlp2aems40v603ju28k3r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
