@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:parkline/models/duenio.dart';
 import 'package:parkline/models/espacios2.dart';
 import 'package:parkline/models/parqueo.dart';
+import 'package:parkline/models/parqueofirebase.dart';
 import 'package:parkline/providers/parqueos_provider.dart';
 import 'package:parkline/utils/colors.dart';
 import 'package:parkline/utils/custom_style.dart';
@@ -22,8 +23,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
-    TextEditingController parkController = TextEditingController();
-
+  TextEditingController parkController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
   UsuarioProvider usuarioProvider = new UsuarioProvider();
@@ -122,8 +122,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   SizedBox(
                     height: Dimensions.heightSize,
                   ),
-
-                     TextFormField(
+                  TextFormField(
                     style: CustomStyle.textStyle,
                     controller: parkController,
                     keyboardType: TextInputType.emailAddress,
@@ -151,7 +150,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   SizedBox(
                     height: Dimensions.heightSize,
                   ),
-
                   TextFormField(
                     style: CustomStyle.textStyle,
                     controller: passwordController,
@@ -214,7 +212,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             ),
             onTap: () async {
-
               final ParqueosProvider parqueosProvider = new ParqueosProvider();
 
               String email = emailController.text.trim();
@@ -227,111 +224,85 @@ class _SignInScreenState extends State<SignInScreen> {
               print('Respuesta object: ${responseApicantidad}');
               print('RESPUESTA: ${responseApicantidad.toJson()}');
 
+              Espacios2 cantidad = Espacios2.fromJson(responseApicantidad.data);
 
-              
-                        Espacios2 cantidad =
-                            Espacios2.fromJson(responseApicantidad.data);
+              String number = cantidad.espaciosOcupados;
+              int amount = int.parse(number);
 
-                        String number = cantidad.espaciosOcupados;
-                        int amount =int.parse(number);
-
-              if (amount==1) {
-
+              if (amount == 1) {
                 //Obtener datos de administrador
 
+                ResponseApi responseApiduenobyemail =
+                    await parqueosProvider.finddueniobyemail(email);
 
-                   ResponseApi responseApiduenobyemail =
-                  await parqueosProvider.finddueniobyemail(email);
+                print(responseApiduenobyemail);
 
-                  print(responseApiduenobyemail);
-
-
-                    Duenio duenio = Duenio.fromJson(responseApiduenobyemail.data);
-
-
-
-
+                Duenio duenio = Duenio.fromJson(responseApiduenobyemail.data);
 
                 //Preguntar por parqueo
 
-                  ResponseApi responseApiparqueo =
-                  await parqueosProvider.findparkamount(duenio.idDuenio, park);
+                ResponseApi responseApiparqueo = await parqueosProvider
+                    .findparkamount(duenio.idDuenio, park);
 
-                      Espacios2 cantidad =
-                            Espacios2.fromJson(responseApiparqueo.data);
+                Espacios2 cantidad =
+                    Espacios2.fromJson(responseApiparqueo.data);
 
-                               String number = cantidad.espaciosOcupados;
-                        int amount2 =int.parse(number);
+                String number = cantidad.espaciosOcupados;
+                int amount2 = int.parse(number);
 
-
-
-
-                if(amount2==1){
-
+                if (amount2 == 1) {
                   // Ya que todo esta correcto obtenemos todos los deatos del parqueo
 
+                  ResponseApi responseApifindparqueo =
+                      await parqueosProvider.getparkbyidfirebase(park);
 
-                       ResponseApi responseApifindparqueo=
-                  await parqueosProvider.getparkbyid(park);
-
-
-                  Parqueo elparqueo=
-                            Parqueo.fromJson(responseApifindparqueo.data);
+                  Parqueofirebase elparqueo =
+                      Parqueofirebase.fromJson(responseApifindparqueo.data);
 
                   //rEGISTRAR TOKEN:------
-          
-                _sharedPref.save('user', elparqueo.toJson());
 
+                  _sharedPref.save('user', elparqueo.toJson());
 
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => DashboardScreen(
-                         
-                         id_parqueo: elparqueo.idParqueo,
-      id_duenio:elparqueo.idDuenio,
-    nombre_empresa: elparqueo.nombreEmpresa,
-    direccion: elparqueo.direccion,
-    capacidad_maxima: elparqueo.capacidadMaxima,
-    media_hora: elparqueo.mediaHora,
-      hora: elparqueo.hora,
-        dia: elparqueo.dia,
-        mes: elparqueo.mes,
-        lunes_apertura: elparqueo.lunesApertura,
-        lunes_cierres:elparqueo.lunesCierre,
-       domingo_apertura: elparqueo.domingoApertura,
-      domingo_cierre: elparqueo.domingoCierre,
-        detalles: elparqueo.detalles,
-        imagenes: elparqueo.imagenes ,
-        latitude: elparqueo.latitude,
-        longitude: elparqueo.longitude,
-        martes_apertura: elparqueo.martesApertura,
-        martes_cierre: elparqueo.martesCierre,
-        miercoles_apertura: elparqueo.miercolesApertura,
-        miercoles_cierre : elparqueo.miercolesCierre,
-        jueves_apertura : elparqueo.juevesApertura,
-        jueves_cierre : elparqueo.juevesCierre,
-        viernes_apertura : elparqueo.viernesApertura ,
-        viernes_cierre : elparqueo.viernesCierre,
-        sabado_apertura : elparqueo.sabadoApertura,
-        sabado_cierre: elparqueo.sabadoCierre,
-        control_pagos : elparqueo.controlPagos,
-        correo: email,
-                        )));
-
-
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => DashboardScreen(
+                            id_parqueo: elparqueo.idParqueo,
+                            id_duenio: elparqueo.idDuenio,
+                            nombre_empresa: elparqueo.nombreEmpresa,
+                            direccion: elparqueo.direccion,
+                            capacidad_maxima: elparqueo.capacidadMaxima,
+                            media_hora: elparqueo.mediaHora,
+                            hora: elparqueo.hora,
+                            dia: elparqueo.dia,
+                            mes: elparqueo.mes,
+                            lunes_apertura: elparqueo.lunesApertura,
+                            lunes_cierres: elparqueo.lunesCierre,
+                            domingo_apertura: elparqueo.domingoApertura,
+                            domingo_cierre: elparqueo.domingoCierre,
+                            detalles: elparqueo.detalles,
+                            imagenes: elparqueo.imagenes,
+                            latitude: elparqueo.latitude,
+                            longitude: elparqueo.longitude,
+                            martes_apertura: elparqueo.martesApertura,
+                            martes_cierre: elparqueo.martesCierre,
+                            miercoles_apertura: elparqueo.miercolesApertura,
+                            miercoles_cierre: elparqueo.miercolesCierre,
+                            jueves_apertura: elparqueo.juevesApertura,
+                            jueves_cierre: elparqueo.juevesCierre,
+                            viernes_apertura: elparqueo.viernesApertura,
+                            viernes_cierre: elparqueo.viernesCierre,
+                            sabado_apertura: elparqueo.sabadoApertura,
+                            sabado_cierre: elparqueo.sabadoCierre,
+                            control_pagos: elparqueo.controlPagos,
+                            correo: email,
+                            id_parqueo_firebase: elparqueo.idFirebase,
+                          )));
+                } else {
+                  NotificationsService.showSnackbar(
+                      "El código del parqueo no existe");
                 }
-
-                else{
-
-                NotificationsService.showSnackbar("El código del parqueo no existe");
-
-                }
-
-
-              
-
-                
               } else {
-                NotificationsService.showSnackbar("Correo o Contraseña no coinciden");
+                NotificationsService.showSnackbar(
+                    "Correo o Contraseña no coinciden");
               }
             },
           ),

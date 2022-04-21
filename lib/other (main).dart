@@ -10,7 +10,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SkillShare(),
+      home: SkillShare(
+        id_parqueo_firebase: '-Mq73KmXyn-fx7tlnIQn',
+      ),
     );
   }
 }

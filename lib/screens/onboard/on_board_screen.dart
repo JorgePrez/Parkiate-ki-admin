@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkline/models/duenio.dart';
 import 'package:parkline/models/parqueo.dart';
+import 'package:parkline/models/parqueofirebase.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/providers/parqueos_provider.dart';
 import 'package:parkline/screens/auth/sign_in_screen.dart';
@@ -122,85 +123,94 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                                   ),
                                 ),
                                 onTap: () async {
-                                
-                                
-                                
-                                
-                                    final ParqueosProvider parqueosProvider = new ParqueosProvider();
+                                  final ParqueosProvider parqueosProvider =
+                                      new ParqueosProvider();
 
                                   //obteniedo el usuario si es que ya esta almacenado en shared prefence
 
-                         
-        
-                             
-                                  Parqueo elparqueo = Parqueo.fromJson(
-                                      await _sharedPref.read('user') ?? {});
+                                  Parqueofirebase elparqueo =
+                                      Parqueofirebase.fromJson(
+                                          await _sharedPref.read('user') ?? {});
 
-                                 // print('Parqueo: ${elparqueo.toJson()}');
+                                  // print('Parqueo: ${elparqueo.toJson()}');
 
                                   if (elparqueo?.idParqueo != null) {
+                                    //OBTENER EL SERVICIO ADMIN-> CORREO
 
-                                     //OBTENER EL SERVICIO ADMIN-> CORREO
+                                    ResponseApi responseApiduenobyemail =
+                                        await parqueosProvider
+                                            .finddueniobyid(elparqueo.idDuenio);
 
-                                     ResponseApi responseApiduenobyemail =
-                  await parqueosProvider.finddueniobyid(elparqueo.idDuenio);
+                                    print(responseApiduenobyemail.data);
 
-                  print(responseApiduenobyemail.data);
-
-
-                    Duenio duenio = Duenio.fromJson(responseApiduenobyemail.data);
-
-                                   
-
+                                    Duenio duenio = Duenio.fromJson(
+                                        responseApiduenobyemail.data);
 
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 DashboardScreen(
-                                                   id_parqueo: elparqueo.idParqueo,
-      id_duenio:elparqueo.idDuenio,
-    nombre_empresa: elparqueo.nombreEmpresa,
-    direccion: elparqueo.direccion,
-    capacidad_maxima: elparqueo.capacidadMaxima,
-    media_hora: elparqueo.mediaHora,
-      hora: elparqueo.hora,
-        dia: elparqueo.dia,
-        mes: elparqueo.mes,
-        lunes_apertura: elparqueo.lunesApertura,
-        lunes_cierres:elparqueo.lunesCierre,
-       domingo_apertura: elparqueo.domingoApertura,
-      domingo_cierre: elparqueo.domingoCierre,
-        detalles: elparqueo.detalles,
-        imagenes: elparqueo.imagenes ,
-        latitude: elparqueo.latitude,
-        longitude: elparqueo.longitude,
-        martes_apertura: elparqueo.martesApertura,
-        martes_cierre: elparqueo.martesCierre,
-        miercoles_apertura: elparqueo.miercolesApertura,
-        miercoles_cierre : elparqueo.miercolesCierre,
-        jueves_apertura : elparqueo.juevesApertura,
-        jueves_cierre : elparqueo.juevesCierre,
-        viernes_apertura : elparqueo.viernesApertura ,
-        viernes_cierre : elparqueo.viernesCierre,
-        sabado_apertura : elparqueo.sabadoApertura,
-        sabado_cierre: elparqueo.sabadoCierre,
-        control_pagos : elparqueo.controlPagos,
-        correo: duenio.correoo,
+                                                  id_parqueo:
+                                                      elparqueo.idParqueo,
+                                                  id_duenio: elparqueo.idDuenio,
+                                                  nombre_empresa:
+                                                      elparqueo.nombreEmpresa,
+                                                  direccion:
+                                                      elparqueo.direccion,
+                                                  capacidad_maxima:
+                                                      elparqueo.capacidadMaxima,
+                                                  media_hora:
+                                                      elparqueo.mediaHora,
+                                                  hora: elparqueo.hora,
+                                                  dia: elparqueo.dia,
+                                                  mes: elparqueo.mes,
+                                                  lunes_apertura:
+                                                      elparqueo.lunesApertura,
+                                                  lunes_cierres:
+                                                      elparqueo.lunesCierre,
+                                                  domingo_apertura:
+                                                      elparqueo.domingoApertura,
+                                                  domingo_cierre:
+                                                      elparqueo.domingoCierre,
+                                                  detalles: elparqueo.detalles,
+                                                  imagenes: elparqueo.imagenes,
+                                                  latitude: elparqueo.latitude,
+                                                  longitude:
+                                                      elparqueo.longitude,
+                                                  martes_apertura:
+                                                      elparqueo.martesApertura,
+                                                  martes_cierre:
+                                                      elparqueo.martesCierre,
+                                                  miercoles_apertura: elparqueo
+                                                      .miercolesApertura,
+                                                  miercoles_cierre:
+                                                      elparqueo.miercolesCierre,
+                                                  jueves_apertura:
+                                                      elparqueo.juevesApertura,
+                                                  jueves_cierre:
+                                                      elparqueo.juevesCierre,
+                                                  viernes_apertura:
+                                                      elparqueo.viernesApertura,
+                                                  viernes_cierre:
+                                                      elparqueo.viernesCierre,
+                                                  sabado_apertura:
+                                                      elparqueo.sabadoApertura,
+                                                  sabado_cierre:
+                                                      elparqueo.sabadoCierre,
+                                                  control_pagos:
+                                                      elparqueo.controlPagos,
+                                                  correo: duenio.correoo,
+                                                  id_parqueo_firebase:
+                                                      elparqueo.idFirebase,
                                                 )));
                                   } else {
-                          
-
-
-                                    
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                 SignInScreen()
-                                                //SignInScreen()
+                                            builder: (context) => SignInScreen()
+                                            //SignInScreen()
 
-                                        )
-                                                );
-                                 }
+                                            ));
+                                  }
                                 },
                               ),
                       ),

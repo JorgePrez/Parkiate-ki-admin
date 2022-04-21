@@ -11,7 +11,7 @@ import 'package:parkline/providers/slots_provider.dart';
 import 'package:parkline/screens/choose_slot_screen.dart';
 import 'package:parkline/screens/choose_slot_screen_test.dart';
 import 'package:parkline/screens/dashboard/scan_qr_screen.dart';
-import 'package:parkline/services/slots_service.dart';
+import 'package:parkline/screens/estado_parqueo.dart';
 import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/utils/custom_style.dart';
 import 'package:parkline/utils/colors.dart';
@@ -28,9 +28,7 @@ import 'package:parkline/providers/serviciosadmin_provider.dart';
 import 'package:parkline/screens/onboard/on_board_screen.dart';
 import 'package:parkline/pages/map_markers.dart';
 import 'package:provider/provider.dart';
-
-
-
+import 'package:parkline/firebase_crud/skillshare.dart';
 
 String selectedVehicle = 'assets/images/vehicle/tourism.png';
 String selectedVehicle2;
@@ -41,69 +39,70 @@ String camion = 'assets/images/vehicle/truck.png';
 String bus = 'assets/images/vehicle/bus.png';
 
 class DashboardScreen extends StatefulWidget {
-
-
   final String id_parqueo,
       id_duenio,
-    nombre_empresa,
-    direccion,
-    capacidad_maxima,
-    media_hora,
+      nombre_empresa,
+      direccion,
+      capacidad_maxima,
+      media_hora,
       hora,
-        dia,
-        mes,
-        lunes_apertura,
-        lunes_cierres,
-       domingo_apertura,
+      dia,
+      mes,
+      lunes_apertura,
+      lunes_cierres,
+      domingo_apertura,
       domingo_cierre,
-        detalles,
-        imagenes ,
-        latitude,
-        longitude,
-        martes_apertura,
-        martes_cierre,
-        miercoles_apertura,
-        miercoles_cierre,
-        jueves_apertura,
-        jueves_cierre,
-        viernes_apertura,
-        viernes_cierre,
-        sabado_apertura,
-        sabado_cierre,
-        control_pagos,
-        correo;
+      detalles,
+      imagenes,
+      latitude,
+      longitude,
+      martes_apertura,
+      martes_cierre,
+      miercoles_apertura,
+      miercoles_cierre,
+      jueves_apertura,
+      jueves_cierre,
+      viernes_apertura,
+      viernes_cierre,
+      sabado_apertura,
+      sabado_cierre,
+      control_pagos,
+      correo,
+      id_parqueo_firebase;
 
-  DashboardScreen({
-    Key key,
-    this.id_parqueo, 
-    this.id_duenio,
-     this.nombre_empresa, 
-     this.direccion, 
-     this.capacidad_maxima, 
-     this.media_hora, 
-     this.hora, this.dia,
-      this.mes, 
-      this.lunes_apertura, 
-      this.lunes_cierres, 
-      this.domingo_apertura, 
+  DashboardScreen(
+      {Key key,
+      this.id_parqueo,
+      this.id_duenio,
+      this.nombre_empresa,
+      this.direccion,
+      this.capacidad_maxima,
+      this.media_hora,
+      this.hora,
+      this.dia,
+      this.mes,
+      this.lunes_apertura,
+      this.lunes_cierres,
+      this.domingo_apertura,
       this.domingo_cierre,
-       this.detalles, 
-       this.imagenes, 
-       this.latitude, 
-       this.longitude, 
-       this.martes_apertura, 
-       this.martes_cierre, 
-       this.miercoles_apertura, 
-       this.miercoles_cierre, 
-       this.jueves_apertura, 
-       this.jueves_cierre, 
-       this.viernes_apertura, 
-       this.viernes_cierre, 
-       this.sabado_apertura, 
-       this.sabado_cierre, 
-       this.control_pagos, 
-       this.correo,
-  }) : super(key: key);
+      this.detalles,
+      this.imagenes,
+      this.latitude,
+      this.longitude,
+      this.martes_apertura,
+      this.martes_cierre,
+      this.miercoles_apertura,
+      this.miercoles_cierre,
+      this.jueves_apertura,
+      this.jueves_cierre,
+      this.viernes_apertura,
+      this.viernes_cierre,
+      this.sabado_apertura,
+      this.sabado_cierre,
+      this.control_pagos,
+      this.correo,
+      this.id_parqueo_firebase})
+      : super(key: key);
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -116,8 +115,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
-   
-
     super.initState();
   }
 
@@ -140,18 +137,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final ServiciosadminProvider serviciosProvider =
         new ServiciosadminProvider();
 
-        final ReseniasProvider reseniasProvider = new ReseniasProvider();
+    final ReseniasProvider reseniasProvider = new ReseniasProvider();
     final ParqueosProvider parqueosProvider = new ParqueosProvider();
 
-     final slotsService = Provider.of<SlotsService>(context);
-
-                   //      print(slotsService.slots);
-
+    //      print(slotsService.slots);
 
     return SafeArea(
-
-       // Material App
-  /*   child: MaterialApp(
+      // Material App
+      /*   child: MaterialApp(
        
       // Scaffold Widget
      home: Scaffold(
@@ -162,7 +155,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       )
     ),*/
 
-      
       child: Scaffold(
           key: scaffoldKey,
           drawer: Drawer(
@@ -175,14 +167,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: CustomColor.primaryColor,
                   ),
                 ),
-
-
-
-
-
-
-
-
                 ListTile(
                   title: Text(
                     'Mi parqueo',
@@ -190,247 +174,237 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   trailing: Icon(Icons.local_parking_outlined),
                   onTap: () async {
+                    var longlatitud = double.parse(widget.latitude);
+                    var longlongitud = double.parse(widget.longitude);
+                    var arr = widget.detalles.split(' ');
+                    var det1;
+                    var det2;
+                    var det3;
+                    var det4;
 
+                    if (arr[0] == '1') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
+                    } else if (arr[0] == '2') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
+                    } else if (arr[0] == '3') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
+                    } else if (arr[0] == '4') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
+                    } else if (arr[0] == '5') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
+                    } else if (arr[0] == '6') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
+                    } else if (arr[0] == '7') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
+                    } else if (arr[0] == '8') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
+                    } else if (arr[0] == '9') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
+                    } else if (arr[0] == 'A') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
+                    } else if (arr[0] == 'B') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
+                    } else if (arr[0] == 'C') {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
+                    } else {
+                      det1 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
+                    }
 
-                    
-                  var longlatitud = double.parse(widget.latitude);
-                  var longlongitud = double.parse(widget.longitude);
-                  var arr = widget.detalles.split(' ');
-                  var det1;
-                  var det2;
-                  var det3;
-                  var det4;
+                    if (arr[1] == '1') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
+                    } else if (arr[1] == '2') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
+                    } else if (arr[1] == '3') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
+                    } else if (arr[1] == '4') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
+                    } else if (arr[1] == '5') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
+                    } else if (arr[1] == '6') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
+                    } else if (arr[1] == '7') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
+                    } else if (arr[1] == '8') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
+                    } else if (arr[1] == '9') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
+                    } else if (arr[1] == 'A') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
+                    } else if (arr[1] == 'B') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
+                    } else if (arr[1] == 'C') {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
+                    } else {
+                      det2 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
+                    }
 
-                  if (arr[0] == '1') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                  } else if (arr[0] == '2') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                  } else if (arr[0] == '3') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                  } else if (arr[0] == '4') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                  } else if (arr[0] == '5') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                  } else if (arr[0] == '6') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                  } else if (arr[0] == '7') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                  } else if (arr[0] == '8') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                  } else if (arr[0] == '9') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                  } else if (arr[0] == 'A') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                  } else if (arr[0] == 'B') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                  } else if (arr[0] == 'C') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                  } else {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                  }
+                    if (arr[2] == '1') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
+                    } else if (arr[2] == '2') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
+                    } else if (arr[2] == '3') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
+                    } else if (arr[2] == '4') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
+                    } else if (arr[2] == '5') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
+                    } else if (arr[2] == '6') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
+                    } else if (arr[2] == '7') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
+                    } else if (arr[2] == '8') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
+                    } else if (arr[2] == '9') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
+                    } else if (arr[2] == 'A') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
+                    } else if (arr[2] == 'B') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
+                    } else if (arr[2] == 'C') {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
+                    } else {
+                      det3 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
+                    }
 
-                  if (arr[1] == '1') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                  } else if (arr[1] == '2') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                  } else if (arr[1] == '3') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                  } else if (arr[1] == '4') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                  } else if (arr[1] == '5') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                  } else if (arr[1] == '6') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                  } else if (arr[1] == '7') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                  } else if (arr[1] == '8') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                  } else if (arr[1] == '9') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                  } else if (arr[1] == 'A') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                  } else if (arr[1] == 'B') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                  } else if (arr[1] == 'C') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                  } else {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                  }
+                    if (arr[3] == '1') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
+                    } else if (arr[3] == '2') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
+                    } else if (arr[3] == '3') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
+                    } else if (arr[3] == '4') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
+                    } else if (arr[3] == '5') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
+                    } else if (arr[3] == '6') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
+                    } else if (arr[3] == '7') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
+                    } else if (arr[3] == '8') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
+                    } else if (arr[3] == '9') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
+                    } else if (arr[3] == 'A') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
+                    } else if (arr[3] == 'B') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
+                    } else if (arr[3] == 'C') {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
+                    } else {
+                      det4 =
+                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
+                    }
 
-                  if (arr[2] == '1') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                  } else if (arr[2] == '2') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                  } else if (arr[2] == '3') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                  } else if (arr[2] == '4') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                  } else if (arr[2] == '5') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                  } else if (arr[2] == '6') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                  } else if (arr[2] == '7') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                  } else if (arr[2] == '8') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                  } else if (arr[2] == '9') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                  } else if (arr[2] == 'A') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                  } else if (arr[2] == 'B') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                  } else if (arr[2] == 'C') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                  } else {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                  }
+                    List<Resenia> listar =
+                        await reseniasProvider.reviewsbyPark(widget.id_parqueo);
 
-                  if (arr[3] == '1') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                  } else if (arr[3] == '2') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                  } else if (arr[3] == '3') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                  } else if (arr[3] == '4') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                  } else if (arr[3] == '5') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                  } else if (arr[3] == '6') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                  } else if (arr[3] == '7') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                  } else if (arr[3] == '8') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                  } else if (arr[3] == '9') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                  } else if (arr[3] == 'A') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                  } else if (arr[3] == 'B') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                  } else if (arr[3] == 'C') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                  } else {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                  }
-                     
+                    //Obtener cantidad de espacios disponbiles
 
-                     List<Resenia> listar = await reseniasProvider
-                            .reviewsbyPark(widget.id_parqueo);
+                    ResponseApi responseApiespacios =
+                        await parqueosProvider.getslots(widget.id_parqueo);
 
-                        //Obtener cantidad de espacios disponbiles
+                    Espacios espacios =
+                        Espacios.fromJson(responseApiespacios.data);
 
-                        ResponseApi responseApiespacios = await parqueosProvider
-                            .getslots(widget.id_parqueo);
+                    String ocupados = espacios.espaciosOcupados;
+                    int espaciodisponibles =
+                        int.parse(widget.capacidad_maxima) -
+                            int.parse(ocupados);
 
-                        Espacios espacios =
-                            Espacios.fromJson(responseApiespacios.data);
+                    String espacioslibres = espaciodisponibles.toString();
 
-                        String ocupados = espacios.espaciosOcupados;
-                        int espaciodisponibles =
-                            int.parse(widget.capacidad_maxima) -
-                                int.parse(ocupados);
+                    print('ESPACIOS: ${espacioslibres}');
 
-                        String espacioslibres = espaciodisponibles.toString();
+                    // print(listar);
 
-                        print('ESPACIOS: ${espacioslibres}');
-
-                        // print(listar);
-
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ParkingPointDetailsScreen(
-                                idpark: widget.id_parqueo,
-                                name: widget.nombre_empresa, //        name: parkingPoint.name,
-                                amount: widget.capacidad_maxima,
-                                image: widget.imagenes,
-                                address: widget.direccion,
-                                slots: espacioslibres,
-                                mediahora: widget.media_hora,
-                                hora: widget.hora,
-                                dia: widget.dia,
-                                mes: widget.mes,
-                                lunesEntrada: widget.lunes_apertura,
-                                lunesCierre: widget.lunes_cierres,
-                                martesEntrada: widget.martes_apertura,
-                                martesSalida: widget.martes_cierre,
-                                detalles: widget.detalles,
-                                detalles1: det1,
-                                detalles2: det2,
-                                detalles3: det3,
-                                detalles4: det4,
-                                latitude: longlatitud,
-                                longitude: longlongitud,
-                                miercolesEntrada:
-                                    widget.miercoles_apertura,
-                                miercolesSalida: widget.miercoles_cierre,
-                                juevesEntrada: widget.jueves_apertura,
-                                juevesSalida: widget.jueves_cierre,
-                                viernesEntrada: widget.viernes_apertura,
-                                viernesSalida: widget.viernes_cierre,
-                                sabadoEntrada: widget.sabado_apertura,
-                                sabadoSalida: widget.sabado_cierre,
-                                domingoEntrada: widget.domingo_apertura,
-                                domingoSalida: widget.domingo_cierre,
-                                controlPagos: widget.control_pagos,
-                                listaresenias: listar)));
-                      },
-
-
-
-
-
-                
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ParkingPointDetailsScreen(
+                            idpark: widget.id_parqueo,
+                            name: widget
+                                .nombre_empresa, //        name: parkingPoint.name,
+                            amount: widget.capacidad_maxima,
+                            image: widget.imagenes,
+                            address: widget.direccion,
+                            slots: espacioslibres,
+                            mediahora: widget.media_hora,
+                            hora: widget.hora,
+                            dia: widget.dia,
+                            mes: widget.mes,
+                            lunesEntrada: widget.lunes_apertura,
+                            lunesCierre: widget.lunes_cierres,
+                            martesEntrada: widget.martes_apertura,
+                            martesSalida: widget.martes_cierre,
+                            detalles: widget.detalles,
+                            detalles1: det1,
+                            detalles2: det2,
+                            detalles3: det3,
+                            detalles4: det4,
+                            latitude: longlatitud,
+                            longitude: longlongitud,
+                            miercolesEntrada: widget.miercoles_apertura,
+                            miercolesSalida: widget.miercoles_cierre,
+                            juevesEntrada: widget.jueves_apertura,
+                            juevesSalida: widget.jueves_cierre,
+                            viernesEntrada: widget.viernes_apertura,
+                            viernesSalida: widget.viernes_cierre,
+                            sabadoEntrada: widget.sabado_apertura,
+                            sabadoSalida: widget.sabado_cierre,
+                            domingoEntrada: widget.domingo_apertura,
+                            domingoSalida: widget.domingo_cierre,
+                            controlPagos: widget.control_pagos,
+                            listaresenias: listar)));
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -440,8 +414,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: Colors.black.withOpacity(0.4),
                   ),
                 ),
-
-
                 ListTile(
                   title: Text(
                     'Servicios Actuales',
@@ -449,8 +421,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   trailing: Icon(Icons.airport_shuttle_outlined),
                   onTap: () async {
-                     List<Servicioadminimagen> lista =
-                        await serviciosProvider.parkhistoryactuales(widget.id_parqueo);
+                    List<Servicioadminimagen> lista = await serviciosProvider
+                        .parkhistoryactuales(widget.id_parqueo);
 
                     print(lista);
 
@@ -468,9 +440,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: Colors.black.withOpacity(0.4),
                   ),
                 ),
-
-
-                 ListTile(
+                ListTile(
                   title: Text(
                     'Historial de Servicios',
                     style: CustomStyle.listStyle,
@@ -496,18 +466,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: Colors.black.withOpacity(0.4),
                   ),
                 ),
-              
-          
                 ListTile(
                   title: Text(
                     'Escanear QR de usuario',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.qr_code_2_rounded ),
+                  trailing: Icon(Icons.qr_code_2_rounded),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ScanPage()));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => ScanPage()));
                   },
                 ),
                 Padding(
@@ -520,41 +488,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    "Estado de mi parqueo",
+                    "Estapacios de mi estacionamiento",
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.dashboard_outlined ),
-                  onTap: () async{
+                  trailing: Icon(Icons.dashboard_outlined),
+                  onTap: () async {
+                    Navigator.of(context).pop();
 
-                     Navigator.of(context).pop();
-
-
-                     
-
-
-              /*    final SlotsProvider slotsProvider = new SlotsProvider();*/
-
-  //  final parqueosService = Provider.of<ParqueosService>(context);
-
-/*
-                  Parkingslots actual = await slotsProvider.buscar();*/
-
-
-                     //TODO: debe recibir una lista, y en base a esa liata construye lso espacios
-                     //POR EL MOMENTO NO EXISTE
-                 /*   Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ChooseSlotScreenTest(
-                          
-/*
-                          p1: true ,
-                        p2: false,
-                          p3: false ,
-                          p4: true ,
-                          p5: true
-                          */
-                          )));*/
-
-                    // Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => EstadoParqueo(
+                              id_parqueo_firebase: widget.id_parqueo_firebase,
+                            )));
                   },
                 ),
                 Padding(
@@ -592,8 +536,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           body: Container(
-
-           /*  child: MaterialApp(
+            /*  child: MaterialApp(
        
       // Scaffold Widget
      home: Scaffold(
@@ -603,20 +546,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       )
     ),*/
-            
+
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: Stack(
               children: [
-
-                  Container(
+                Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: Center(
-          child: Text('Dashboard de administrador'),
-        ),
+                    child: Text('Dashboard de administrador'),
+                  ),
                 ),
-
 
                 /*
                 Container(
@@ -630,7 +571,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       placa_auto: widget.placa_auto,
                       imagen_usuario: widget.imagen),
                 ),*/
-               /* DraggableScrollableSheet(
+                /* DraggableScrollableSheet(
                   builder: (context, scrollController) {
                     return Container(
                       decoration: BoxDecoration(
@@ -688,7 +629,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: ListTile(
         leading: Image.network(
           widget.imagenes,
-          
         ),
         title: Text(
           '${widget?.nombre_empresa ?? ''}',
@@ -718,7 +658,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           top: Dimensions.heightSize * 3),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [/*
+        children: [
+          /*
           Text('Bienvenido ${widget?.nombre ?? ''}!!!',
               style: CustomStyle.textStyle),
           Text(
@@ -830,7 +771,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
- /* parkingPointWidget(BuildContext context) {
+  /* parkingPointWidget(BuildContext context) {
     final ReseniasProvider reseniasProvider = new ReseniasProvider();
     final ParqueosProvider parqueosProvider = new ParqueosProvider();
 

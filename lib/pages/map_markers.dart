@@ -3,7 +3,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkline/models/models.dart';
 import 'package:parkline/services/services.dart';
 import 'package:parkline/screens/parking_point_details_screen.dart';
-import 'package:parkline/services/slots_service.dart';
 import 'package:provider/provider.dart';
 import 'package:parkline/helpers/helpers.dart';
 import 'package:parkline/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
@@ -118,11 +117,6 @@ class _MapMarkersState extends State<MapMarkers> {
   Set<Marker> getmarkers() {
     final parqueosService = Provider.of<ParqueosService>(context);
     final ParqueosProvider parqueosProvider = new ParqueosProvider();
-
-                         final slotsService = Provider.of<SlotsService>(context);
-
-                    //     print(slotsService.slots);
-
 
     //markers to place on map
     setState(() {
@@ -368,11 +362,11 @@ class _MapMarkersState extends State<MapMarkers> {
                     domingoEntrada: parkingPoint.domingoApertura,
                     domingoSalida: parkingPoint.domingoCierre,
                     controlPagos: parkingPoint.controlPagos,
-                 //   idusuario: widget.idusuario,
-                  //  nombreusuario: widget.nombreusuario,
-                   // telefono: widget.telefono,
-                   // modelo_auto: widget.modelo_auto,
-                   // placa_auto: widget.placa_auto,
+                    //   idusuario: widget.idusuario,
+                    //  nombreusuario: widget.nombreusuario,
+                    // telefono: widget.telefono,
+                    // modelo_auto: widget.modelo_auto,
+                    // placa_auto: widget.placa_auto,
                     //imagen_usuario: widget.imagen_usuario,
                     listaresenias: listar)));
           },

@@ -15,6 +15,13 @@ String q4 = '4. City';
 final FirebaseDatabase database = FirebaseDatabase.instance;
 
 class SkillShare extends StatefulWidget {
+  final String id_parqueo_firebase;
+
+  SkillShare({
+    Key key,
+    this.id_parqueo_firebase,
+  }) : super(key: key);
+
   @override
   _SkillShareState createState() => _SkillShareState();
 }
@@ -37,9 +44,11 @@ class _SkillShareState extends State<SkillShare> {
   void initState() {
     super.initState();
 
+    String referencia = "Parking_Status/" + widget.id_parqueo_firebase;
+
     bioList = List();
-    bio = Bio('', '', '', '');
-    databaseReference = database.reference().child('employee_bio');
+    bio = Bio('', false, '', '');
+    databaseReference = database.reference().child(referencia);
 
     //other     databaseReference = database.reference().child('Football_Team_Bio ');
 
@@ -169,7 +178,7 @@ class _SkillShareState extends State<SkillShare> {
                                                           ? 'This field cant be empty'
                                                           : null,
                                                       onSaved: (newValue) =>
-                                                          bio.name = newValue,
+                                                          bio.codigo = newValue,
                                                     ),
                                                     SizedBox(
                                                       height: 30,
@@ -188,8 +197,10 @@ class _SkillShareState extends State<SkillShare> {
                                                               .isEmpty
                                                           ? 'This field cant be empty'
                                                           : null,
-                                                      onSaved: (newValue) =>
-                                                          bio.dob = newValue,
+                                                      onSaved: (newValue) => bio
+                                                          .estado = newValue
+                                                              .toLowerCase() ==
+                                                          'true',
                                                     ),
                                                     SizedBox(
                                                       height: 30,
@@ -209,7 +220,7 @@ class _SkillShareState extends State<SkillShare> {
                                                           ? 'This field cant be empty'
                                                           : null,
                                                       onSaved: (newValue) => bio
-                                                          .country = newValue,
+                                                          .id_slot = newValue,
                                                     ),
                                                     SizedBox(
                                                       height: 30,
@@ -228,8 +239,8 @@ class _SkillShareState extends State<SkillShare> {
                                                               .isEmpty
                                                           ? 'This field cant be empty'
                                                           : null,
-                                                      onSaved: (newValue) =>
-                                                          bio.city = newValue,
+                                                      onSaved: (newValue) => bio
+                                                          .reservas = newValue,
                                                     ),
                                                     SizedBox(
                                                       height: 30,
@@ -298,6 +309,12 @@ class _SkillShareState extends State<SkillShare> {
                       query: databaseReference,
                       itemBuilder: (BuildContext context, DataSnapshot snapshot,
                           Animation<double> animation, int index) {
+                        //   bioList.add(Bio.fromSnapshot((snapshot)));
+
+                        /* databaseReference.onChildAdded.listen(_onEntryAdded);
+                        databaseReference.onChildChanged
+                            .listen(_onEntryChanged);*/
+
                         return Column(
                           children: [
                             ListTile(
@@ -310,7 +327,8 @@ class _SkillShareState extends State<SkillShare> {
                                 ),
                               ),
                               title: Text(
-                                bioList[index].name,
+                                bioList[index].codigo,
+                                //  snapshot.toString(),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
@@ -318,7 +336,9 @@ class _SkillShareState extends State<SkillShare> {
                                 ),
                               ),
                               subtitle: Text(
-                                bioList[index].dob,
+                                bioList[index].estado.toString(),
+                                //snapshot.toString(),
+
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
@@ -347,9 +367,11 @@ class _SkillShareState extends State<SkillShare> {
                                               }),
                                           centerTitle: true,
                                           title: Text(
-                                            bioList[index].name +
+                                            bioList[index].codigo +
                                                 ' - ' +
-                                                bioList[index].country,
+                                                bioList[index]
+                                                    .estado
+                                                    .toString(),
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold),
@@ -389,9 +411,11 @@ class _SkillShareState extends State<SkillShare> {
                                                       ),
                                                       TextFormField(
                                                         initialValue:
-                                                            bioList[index].name,
+                                                            bioList[index]
+                                                                .codigo,
                                                         onSaved: (newValue) =>
-                                                            bio.name = newValue,
+                                                            bio.codigo =
+                                                                newValue,
                                                         validator: (value) => value
                                                                 .isEmpty
                                                             ? 'This form can\t be empty'
@@ -410,9 +434,12 @@ class _SkillShareState extends State<SkillShare> {
                                                       ),
                                                       TextFormField(
                                                         initialValue:
-                                                            bioList[index].dob,
-                                                        onSaved: (newValue) =>
-                                                            bio.dob = newValue,
+                                                            bioList[index]
+                                                                .id_slot,
+                                                        onSaved: (newValue) => bio
+                                                            .estado = newValue
+                                                                .toLowerCase() ==
+                                                            'true',
                                                         validator: (value) => value
                                                                 .isEmpty
                                                             ? 'This form can\t be empty'
@@ -432,9 +459,9 @@ class _SkillShareState extends State<SkillShare> {
                                                       TextFormField(
                                                         initialValue:
                                                             bioList[index]
-                                                                .country,
+                                                                .id_slot,
                                                         onSaved: (newValue) =>
-                                                            bio.country =
+                                                            bio.id_slot =
                                                                 newValue,
                                                         validator: (value) => value
                                                                 .isEmpty
@@ -454,9 +481,11 @@ class _SkillShareState extends State<SkillShare> {
                                                       ),
                                                       TextFormField(
                                                         initialValue:
-                                                            bioList[index].city,
+                                                            bioList[index]
+                                                                .reservas,
                                                         onSaved: (newValue) =>
-                                                            bio.city = newValue,
+                                                            bio.reservas =
+                                                                newValue,
                                                         validator: (value) => value
                                                                 .isEmpty
                                                             ? 'This form can\t be empty'

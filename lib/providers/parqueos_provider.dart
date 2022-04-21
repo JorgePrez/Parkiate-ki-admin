@@ -33,7 +33,7 @@ class ParqueosProvider {
       print(data);
 
       Parqueo parqueo = Parqueo.fromJsonList(data);
-    //  print(parqueo.toList);
+      //  print(parqueo.toList);
       return parqueo.toList;
     } catch (e) {
       print('Error: $e');
@@ -43,8 +43,7 @@ class ParqueosProvider {
 
   //obtener la infomracion de un parqueo por iod
 
-
-    Future<ResponseApi> getparkbyid(String id_parqueo) async {
+  Future<ResponseApi> getparkbyid(String id_parqueo) async {
     try {
       Uri url = Uri.http(_url, '$_api/findpark');
 
@@ -65,6 +64,28 @@ class ParqueosProvider {
     }
   }
 
+  //Obtener informacion del parqueo con id de Firebase
+
+  Future<ResponseApi> getparkbyidfirebase(String id_parqueo) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/findfullpark');
+
+      String bodyParams = json.encode({
+        'id_parqueo': id_parqueo,
+      });
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
 
   Future<ResponseApi> getprize(String id_parqueo) async {
     try {
@@ -108,14 +129,13 @@ class ParqueosProvider {
     }
   }
 
-    Future<ResponseApi> getreviews(String id_parqueo, String nombre_usuario) async {
+  Future<ResponseApi> getreviews(
+      String id_parqueo, String nombre_usuario) async {
     try {
       Uri url = Uri.http(_url, '$_api/reviews');
 
-      String bodyParams = json.encode({
-        'id_parqueo': id_parqueo,
-        'nombre_usuario': nombre_usuario
-      });
+      String bodyParams = json
+          .encode({'id_parqueo': id_parqueo, 'nombre_usuario': nombre_usuario});
 
       Map<String, String> headers = {'Content-type': 'application/json'};
 
@@ -130,15 +150,12 @@ class ParqueosProvider {
     }
   }
 
-
-     Future<ResponseApi> login(String id_parqueo, String contrasenia) async {
+  Future<ResponseApi> login(String id_parqueo, String contrasenia) async {
     try {
       Uri url = Uri.http(_url, '$_api/login');
 
-      String bodyParams = json.encode({
-        'id_parqueo': id_parqueo,
-        'contrasenia': contrasenia
-      });
+      String bodyParams =
+          json.encode({'id_parqueo': id_parqueo, 'contrasenia': contrasenia});
 
       Map<String, String> headers = {'Content-type': 'application/json'};
 
@@ -153,14 +170,13 @@ class ParqueosProvider {
     }
   }
 
-   Future<ResponseApi> findparkamount(String id_duenio, String id_parqueo) async {
+  Future<ResponseApi> findparkamount(
+      String id_duenio, String id_parqueo) async {
     try {
       Uri url = Uri.http(_url, '$_api/findparkamount');
 
-      String bodyParams = json.encode({
-        'id_duenio': id_duenio,
-        'id_parqueo': id_parqueo
-      });
+      String bodyParams =
+          json.encode({'id_duenio': id_duenio, 'id_parqueo': id_parqueo});
 
       Map<String, String> headers = {'Content-type': 'application/json'};
 
@@ -175,14 +191,11 @@ class ParqueosProvider {
     }
   }
 
-
-   Future<ResponseApi> finddueniobyemail(String correoo) async {
+  Future<ResponseApi> finddueniobyemail(String correoo) async {
     try {
       Uri url = Uri.http(_url, '$_api/dueniobyemail');
 
-      String bodyParams = json.encode({
-        'correoo': correoo
-      });
+      String bodyParams = json.encode({'correoo': correoo});
 
       Map<String, String> headers = {'Content-type': 'application/json'};
 
@@ -196,15 +209,12 @@ class ParqueosProvider {
       return null;
     }
   }
-
 
   Future<ResponseApi> finddueniobyid(String id_duenio) async {
     try {
       Uri url = Uri.http(_url, '$_api/dueniobyid');
 
-      String bodyParams = json.encode({
-        'correoo': id_duenio
-      });
+      String bodyParams = json.encode({'correoo': id_duenio});
 
       Map<String, String> headers = {'Content-type': 'application/json'};
 
@@ -218,6 +228,4 @@ class ParqueosProvider {
       return null;
     }
   }
-
-
 }
