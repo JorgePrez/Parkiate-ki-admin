@@ -488,7 +488,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    "Estapacios de mi estacionamiento",
+                    "Espacios de mi estacionamiento",
                     style: CustomStyle.listStyle,
                   ),
                   trailing: Icon(Icons.dashboard_outlined),
