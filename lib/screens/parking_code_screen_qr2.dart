@@ -29,14 +29,10 @@ class ParkingCodeScreenQr2 extends StatefulWidget {
       idusuario,
       nombreusuario,
       telefono,
-      modelo_auto,
       placa_auto,
       precio;
 
-      final String imagen_auto;
-
-   
-
+  final String imagen_auto;
 
   ParkingCodeScreenQr2(
       {Key key,
@@ -51,9 +47,9 @@ class ParkingCodeScreenQr2 extends StatefulWidget {
       this.idusuario,
       this.nombreusuario,
       this.telefono,
-      this.modelo_auto,
       this.placa_auto,
-      this.precio, this.imagen_auto})
+      this.precio,
+      this.imagen_auto})
       : super(key: key);
 
   @override
@@ -61,8 +57,7 @@ class ParkingCodeScreenQr2 extends StatefulWidget {
 }
 
 class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
-
-    SharedPref _sharedPref = new SharedPref();
+  SharedPref _sharedPref = new SharedPref();
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +97,7 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
             },
           ),
         ),
-     /*   SizedBox(
+        /*   SizedBox(
           height: Dimensions.heightSize * 1.5, //2
         ),*/
         Container(
@@ -111,7 +106,7 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                    top: Dimensions.heightSize * 1,//2.5
+                    top: Dimensions.heightSize * 1, //2.5
                     left: Dimensions //3
                         .marginSize,
                     right: Dimensions.marginSize),
@@ -123,23 +118,21 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
                       color: Colors.black),
                 ),
               ),
-           //   SizedBox(height: Dimensions.heightSize),
+              //   SizedBox(height: Dimensions.heightSize),
               GestureDetector(
                 child: Image.network(
                   widget.imagen_auto,
                   height: 175.0,
                 ),
-
-               
               ),
             ],
           ),
         ),
-       SizedBox(
-          height: Dimensions.heightSize * 1,//1 //2
+        SizedBox(
+          height: Dimensions.heightSize * 1, //1 //2
         ),
         invoiceDetailsWidget(context),
-       // SizedBox(height: Dimensions.heightSize * 2.5), //3
+        // SizedBox(height: Dimensions.heightSize * 2.5), //3
         /*Padding(
           padding: const EdgeInsets.only(
               left: Dimensions.marginSize, right: Dimensions.marginSize),
@@ -152,11 +145,9 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
     String valor = "";
     if (widget.precio == 'N/A') {
       valor = 'N/A';
-    }
-    else if(widget.precio=='Por Definir'){
-      valor ='Por Definir';
-    }
-     else {
+    } else if (widget.precio == 'Por Definir') {
+      valor = 'Por Definir';
+    } else {
       valor = 'Q${widget.precio}.00';
     }
 
@@ -277,7 +268,7 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
                       height: Dimensions.heightSize * 0.5,
                     ),
                     Text(
-                      widget.modelo_auto, //Strings.demoModelNo,
+                      'modelo', //Strings.demoModelNo,
                       style: TextStyle(
                           fontSize: Dimensions.defaultTextSize,
                           color: CustomColor.primaryColor),
@@ -378,104 +369,72 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
             ],
           ),
           SizedBox(height: Dimensions.heightSize),
+          if (widget.precio != 'Por Definir') ...[
+            //desesctructurar el arreglo
 
-              if(widget.precio != 'Por Definir') 
-                       
-
-                ...[ //desesctructurar el arreglo 
-             
-             Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Valor del servicio:',
-                style: CustomStyle.textStyle,
-              ),
-              SizedBox(
-                height: Dimensions.heightSize * 0.5,
-              ),
-              Text(
-                valor,
-                style: TextStyle(
-                    fontSize: Dimensions.defaultTextSize,
-                    color: CustomColor.primaryColor),
-              ),
-            ],
-          ),
-
-            
-          ],
-
-              if(widget.precio == 'Por Definir')
-
-                ...[ //desesctructurar el arreglo 
-
-
-                 Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            Text(
-  'NOTA: Presione este botón UNICAMENTE si por algún mótivo el usuario NO puede acceder a su QR',
-  style: TextStyle(
-  	fontWeight: FontWeight.bold
-  ),
-)
-           
-          
-            ],
-          ),
-
-                     SizedBox(height: Dimensions.heightSize),
-
-
-                Padding(
-          padding: const EdgeInsets.only(
-              left: Dimensions.marginSize, right: Dimensions.marginSize),
-          child: GestureDetector(
-            child: Container(
-              height: 50.0,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: CustomColor.redColor,
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(Dimensions.radius * 0.5))),
-              child: Center(
-                child: Text(
-                  'FINALIZAR',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: Dimensions.largeTextSize,
-                      fontWeight: FontWeight.bold),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Valor del servicio:',
+                  style: CustomStyle.textStyle,
                 ),
+                SizedBox(
+                  height: Dimensions.heightSize * 0.5,
+                ),
+                Text(
+                  valor,
+                  style: TextStyle(
+                      fontSize: Dimensions.defaultTextSize,
+                      color: CustomColor.primaryColor),
+                ),
+              ],
+            ),
+          ],
+          if (widget.precio == 'Por Definir') ...[
+            //desesctructurar el arreglo
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'NOTA: Presione este botón UNICAMENTE si por algún mótivo el usuario NO puede acceder a su QR',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+
+            SizedBox(height: Dimensions.heightSize),
+
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: Dimensions.marginSize, right: Dimensions.marginSize),
+              child: GestureDetector(
+                child: Container(
+                  height: 50.0,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: CustomColor.redColor,
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(Dimensions.radius * 0.5))),
+                  child: Center(
+                    child: Text(
+                      'FINALIZAR',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Dimensions.largeTextSize,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                onTap: () async {
+                  //Mostrar modal(dialog) , con advetenica.
+
+                  _showPaymentSuccessDialog();
+                },
               ),
             ),
-            onTap: () async {
-
-               //Mostrar modal(dialog) , con advetenica. 
-
-                               _showPaymentSuccessDialog();
-
-
-
-            },
-          ),
-        ),
-
-       
-             
-           
-
-            
           ],
-
-                 
-
-
-
-              
-
-
-        
         ],
       ),
     );
@@ -494,8 +453,8 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
                 children: [
                   Image.asset('assets/images/warningicon.png'),
                   Text(
-  'Recuerda que solo debes usar esta opción cuando el usuario NO TIENE ACCESSO a su QR, por ejemplo en el caso en que EL TÉLEFONO del usuario se haya quedado SIN CARGA, en casos como estos presiona el botón rojo para registrar el servicio SIN EL USO DE QR', 
-              
+                    'Recuerda que solo debes usar esta opción cuando el usuario NO TIENE ACCESSO a su QR, por ejemplo en el caso en que EL TÉLEFONO del usuario se haya quedado SIN CARGA, en casos como estos presiona el botón rojo para registrar el servicio SIN EL USO DE QR',
+
                     // Strings.nowCheckYourEmail2,
                     style: TextStyle(
                       fontSize: Dimensions.largeTextSize,
@@ -503,7 +462,6 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  
                   GestureDetector(
                     child: Container(
                       height: 60.0,
@@ -516,177 +474,147 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
                         child: Text(
                           'Registrar como finalizado'.toUpperCase(),
                           style: TextStyle(
-                                color: Colors.white,
-                      fontSize: Dimensions.largeTextSize,
-                      fontWeight: FontWeight.bold),
+                              color: Colors.white,
+                              fontSize: Dimensions.largeTextSize,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
-                    onTap: () async{
+                    onTap: () async {
+                      //REGISTRAR COMO FINALIZADO
+                      final ParqueosProvider parqueosProvider =
+                          new ParqueosProvider();
+                      final ServiciosadminProvider serviciosProvider =
+                          new ServiciosadminProvider();
 
-                               //REGISTRAR COMO FINALIZADO 
-                      final ParqueosProvider parqueosProvider = new ParqueosProvider();
-            final ServiciosadminProvider serviciosProvider = new ServiciosadminProvider();
+                      ResponseApi responseApi22 =
+                          await serviciosProvider.getById(widget.idservicio);
 
-                               
-                        ResponseApi responseApi22 = await serviciosProvider.getById(widget.idservicio);
+                      Servicioadmin serviciorecuperado =
+                          Servicioadmin.fromJson(responseApi22.data);
 
-                    
-                Servicioadmin serviciorecuperado =
-                    Servicioadmin.fromJson(responseApi22.data);
+                      ResponseApi responseApitafias = await parqueosProvider
+                          .getprize(serviciorecuperado.idParqueo);
 
+                      Prize prize = Prize.fromJson(responseApitafias.data);
 
-                    
-                ResponseApi responseApitafias = await parqueosProvider
-                    .getprize(serviciorecuperado.idParqueo);
+                      //Calcuar el precio a cobrar segun la cantidad de horas/minutos
 
-                Prize prize = Prize.fromJson(responseApitafias.data);
+                      final currentTime =
+                          DateFormat.Hm().format(DateTime.now());
 
+                      var format = DateFormat("HH:mm");
+                      var start =
+                          format.parse(serviciorecuperado.horaDeentrada);
+                      var end = format.parse(currentTime);
 
+                      Duration diferenciafake =
+                          end.difference(start); // prints 7:40
 
+                      String diferenciaString = diferenciafake.toString();
+                      String diferenciaString2 =
+                          diferenciaString.substring(0, 4); // 'art'
 
-                  //Calcuar el precio a cobrar segun la cantidad de horas/minutos
+                      String horas = diferenciaString2.substring(0, 1);
+                      String minutos = diferenciaString2.substring(2);
 
-                      final currentTime = DateFormat.Hm().format(DateTime.now());
+                      //widget.diferencia = "horas: " + horas + "-" + "minutos: " + minutos;
 
+                      int totalhoras = int.parse(horas);
 
+                      int totalminutos = int.parse(minutos);
 
-                   var format = DateFormat("HH:mm");
-     var start = format.parse(serviciorecuperado.horaDeentrada);
-     var end = format.parse(currentTime);
+                      int precioporhora = int.parse(prize.hora);
+                      int preciopormediahora = int.parse(prize.mediaHora);
 
+                      int preciototal = 0;
 
+                      if (totalhoras > 0) {
+                        preciototal = precioporhora * totalhoras;
 
-    Duration diferenciafake = end.difference(start); // prints 7:40
+                        if (totalminutos < 30) {
+                          preciototal = preciototal + preciopormediahora;
+                        } else {
+                          preciototal = preciototal + precioporhora;
+                        }
+                      } else {
+                        if (totalminutos < 30) {
+                          preciototal = preciopormediahora;
+                        } else {
+                          preciototal = precioporhora;
+                        }
+                      }
+                      String precio = preciototal.toString();
 
-    String diferenciaString = diferenciafake.toString();
-    String diferenciaString2 = diferenciaString.substring(0, 4); // 'art'
+                      //Actaulizar la hora de salida y el precio a cobrar
 
-    String horas = diferenciaString2.substring(0, 1);
-    String minutos = diferenciaString2.substring(2);
+                      ResponseApi responseApi5 = await serviciosProvider.update(
+                          widget.idservicio, currentTime, precio);
 
-    //widget.diferencia = "horas: " + horas + "-" + "minutos: " + minutos;
+                      if (responseApi5.success) {
+                        //REGRESAR A DASHBOARD
 
-    int totalhoras = int.parse(horas);
+                        //obteniedo el usuario si es que ya esta almacenado en shared prefence
 
-    int totalminutos = int.parse(minutos);
+                        Parqueo elparqueo = Parqueo.fromJson(
+                            await _sharedPref.read('user') ?? {});
 
-    int precioporhora = int.parse(prize.hora);
-    int preciopormediahora = int.parse(prize.mediaHora);
+                        print('Parqueo: ${elparqueo.toJson()}');
 
-    int preciototal = 0;
+                        //OBTENER EL SERVICIO ADMIN-> CORREO
 
-    if (totalhoras > 0) {
-      preciototal = precioporhora * totalhoras;
+                        ResponseApi responseApiduenobyemail =
+                            await parqueosProvider
+                                .finddueniobyid(elparqueo.idDuenio);
 
-      if (totalminutos < 30) {
-        preciototal = preciototal + preciopormediahora;
-      } else {
-        preciototal = preciototal + precioporhora;
-      }
-    } else {
-      if (totalminutos < 30) {
-        preciototal = preciopormediahora;
-      } else {
-        preciototal = precioporhora;
-      }
-    }
-    String precio = preciototal.toString();
+                        print(responseApiduenobyemail.data);
 
+                        Duenio duenio =
+                            Duenio.fromJson(responseApiduenobyemail.data);
 
-                  //Actaulizar la hora de salida y el precio a cobrar 
+                        NotificationsService.showSnackbar(
+                            "Servicio Finalizado y Registrado");
 
-
- ResponseApi responseApi5 = await serviciosProvider.update(
-                  widget.idservicio, 
-                  currentTime ,
-                   precio);
-
-
-
- if (responseApi5.success) {
-         
-           
-
-        
-                                
- 
-
-
-                                //REGRESAR A DASHBOARD
-
-                                  //obteniedo el usuario si es que ya esta almacenado en shared prefence
-
-                         
-        
-                             
-                                  Parqueo elparqueo = Parqueo.fromJson(
-                                      await _sharedPref.read('user') ?? {});
-
-                                  print('Parqueo: ${elparqueo.toJson()}');
-
-
-                                     //OBTENER EL SERVICIO ADMIN-> CORREO
-
-                                     ResponseApi responseApiduenobyemail =
-                  await parqueosProvider.finddueniobyid(elparqueo.idDuenio);
-
-                  print(responseApiduenobyemail.data);
-
-
-                    Duenio duenio = Duenio.fromJson(responseApiduenobyemail.data);
-                       
-         NotificationsService.showSnackbar("Servicio Finalizado y Registrado");
-
-                                   
-
-
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                DashboardScreen(
-                                                   id_parqueo: elparqueo.idParqueo,
-      id_duenio:elparqueo.idDuenio,
-    nombre_empresa: elparqueo.nombreEmpresa,
-    direccion: elparqueo.direccion,
-    capacidad_maxima: elparqueo.capacidadMaxima,
-    media_hora: elparqueo.mediaHora,
-      hora: elparqueo.hora,
-        dia: elparqueo.dia,
-        mes: elparqueo.mes,
-        lunes_apertura: elparqueo.lunesApertura,
-        lunes_cierres:elparqueo.lunesCierre,
-       domingo_apertura: elparqueo.domingoApertura,
-      domingo_cierre: elparqueo.domingoCierre,
-        detalles: elparqueo.detalles,
-        imagenes: elparqueo.imagenes ,
-        latitude: elparqueo.latitude,
-        longitude: elparqueo.longitude,
-        martes_apertura: elparqueo.martesApertura,
-        martes_cierre: elparqueo.martesCierre,
-        miercoles_apertura: elparqueo.miercolesApertura,
-        miercoles_cierre : elparqueo.miercolesCierre,
-        jueves_apertura : elparqueo.juevesApertura,
-        jueves_cierre : elparqueo.juevesCierre,
-        viernes_apertura : elparqueo.viernesApertura ,
-        viernes_cierre : elparqueo.viernesCierre,
-        sabado_apertura : elparqueo.sabadoApertura,
-        sabado_cierre: elparqueo.sabadoCierre,
-        control_pagos : elparqueo.controlPagos,
-        correo: duenio.correoo,
-                                                )));
-                                  
-                    
-                       }
-                  
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => DashboardScreen(
+                                  id_parqueo: elparqueo.idParqueo,
+                                  id_duenio: elparqueo.idDuenio,
+                                  nombre_empresa: elparqueo.nombreEmpresa,
+                                  direccion: elparqueo.direccion,
+                                  capacidad_maxima: elparqueo.capacidadMaxima,
+                                  media_hora: elparqueo.mediaHora,
+                                  hora: elparqueo.hora,
+                                  dia: elparqueo.dia,
+                                  mes: elparqueo.mes,
+                                  lunes_apertura: elparqueo.lunesApertura,
+                                  lunes_cierres: elparqueo.lunesCierre,
+                                  domingo_apertura: elparqueo.domingoApertura,
+                                  domingo_cierre: elparqueo.domingoCierre,
+                                  detalles: elparqueo.detalles,
+                                  imagenes: elparqueo.imagenes,
+                                  latitude: elparqueo.latitude,
+                                  longitude: elparqueo.longitude,
+                                  martes_apertura: elparqueo.martesApertura,
+                                  martes_cierre: elparqueo.martesCierre,
+                                  miercoles_apertura:
+                                      elparqueo.miercolesApertura,
+                                  miercoles_cierre: elparqueo.miercolesCierre,
+                                  jueves_apertura: elparqueo.juevesApertura,
+                                  jueves_cierre: elparqueo.juevesCierre,
+                                  viernes_apertura: elparqueo.viernesApertura,
+                                  viernes_cierre: elparqueo.viernesCierre,
+                                  sabado_apertura: elparqueo.sabadoApertura,
+                                  sabado_cierre: elparqueo.sabadoCierre,
+                                  control_pagos: elparqueo.controlPagos,
+                                  correo: duenio.correoo,
+                                )));
+                      }
                     },
                   ),
-
-                     SizedBox(
-                height: Dimensions.heightSize * 0.5,
-              ),
-
-                   GestureDetector(
+                  SizedBox(
+                    height: Dimensions.heightSize * 0.5,
+                  ),
+                  GestureDetector(
                     child: Container(
                       height: 60.0,
                       width: MediaQuery.of(context).size.width,
@@ -705,13 +633,10 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
                       ),
                     ),
                     onTap: () {
-
                       print("ROLLING ROLLIN");
-                       Navigator.of(context).pop();
+                      Navigator.of(context).pop();
 
-                    
-                    
-                    /*
+                      /*
 
                     
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -730,6 +655,4 @@ class _ParkingCodeScreenQr2State extends State<ParkingCodeScreenQr2> {
         )) ??
         false;
   }
-
-
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:parkline/models/parkingslots.dart';
 import 'package:parkline/models/servicioadmin.dart';
 import 'package:parkline/models/servicioadminimagen.dart';
+import 'package:parkline/models/serviciotrue.dart';
 import 'package:parkline/models/user.dart';
 import 'package:parkline/models/espacios.dart';
 import 'package:parkline/models/response_api.dart';
@@ -421,8 +422,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   trailing: Icon(Icons.airport_shuttle_outlined),
                   onTap: () async {
-                    List<Servicioadminimagen> lista = await serviciosProvider
-                        .parkhistoryactuales(widget.id_parqueo);
+                    List<Serviciotrue> lista = await serviciosProvider
+                        .parkhistorytruesorry(widget.id_parqueo);
 
                     print(lista);
 
@@ -447,8 +448,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   trailing: Icon(Icons.history_edu_outlined),
                   onTap: () async {
-                    List<Servicioadminimagen> lista =
-                        await serviciosProvider.parkhistory(widget.id_parqueo);
+                    List<Serviciotrue> lista = await serviciosProvider
+                        .parkhistorytrue(widget.id_parqueo);
 
                     print(lista);
 

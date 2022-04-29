@@ -5,6 +5,7 @@ import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/servicioadmin.dart';
 import 'package:http/http.dart' as http;
 import 'package:parkline/models/servicioadminimagen.dart';
+import 'package:parkline/models/serviciotrue.dart';
 
 class ServiciosadminProvider {
   String _url = Enviroment.API_PARKIATE_KI;
@@ -54,6 +55,28 @@ class ServiciosadminProvider {
       return null;
     }
   }
+
+  Future<ResponseApi> getByIdtrue(String id_servicio) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/getServiceById');
+
+      String bodyParams = json.encode({
+        'id_servicio': id_servicio,
+      });
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
   //ACTUALIZAR CAMPSO hora de saldia y precio
   Future<ResponseApi> update(
       String id_servicio, String hora_desalida, String precio) async {
@@ -85,27 +108,54 @@ class ServiciosadminProvider {
     }
   }
 
-   // Actualizar (crear) la informacion del servicio cuando ya fue registrado por medio deL QR
+  Future<ResponseApi> updatetrue(
+      String id_servicio, String hora_desalida, String precio) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/updatetrue');
 
+      /*
+        "id_servicio": "ABCA322" ,
+	 "hora_desalida": "12:000000",
+	 "precio": "300" */
 
-   Future<ResponseApi> updateqr(
+      String bodyParams = json.encode({
+        'id_servicio': id_servicio,
+        'hora_desalida': hora_desalida,
+        'precio': precio
+      });
+
+      //<llave, valoir>
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.put(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
+  // Actualizar (crear) la informacion del servicio cuando ya fue registrado por medio deL QR
+
+  Future<ResponseApi> updateqr(
       String id_servicio,
-     String id_parqueo,
-     String direccion,
-     String nombre_parqueo,
-     String imagenes, 
-     String id_usuario,
-     String nombre_usuario,
-     String telefono,
-     String modelo_auto,
-     String placa_auto,
-     String fecha,
-	   String hora_deentrada,
-	   String hora_desalida,
-	   String precio,
-	   String parqueo_control_pagos
-
-       ) async {
+      String id_parqueo,
+      String direccion,
+      String nombre_parqueo,
+      String imagenes,
+      String id_usuario,
+      String nombre_usuario,
+      String telefono,
+      String modelo_auto,
+      String placa_auto,
+      String fecha,
+      String hora_deentrada,
+      String hora_desalida,
+      String precio,
+      String parqueo_control_pagos) async {
     try {
       Uri url = Uri.http(_url, '$_api/updateqr');
 
@@ -134,16 +184,16 @@ class ServiciosadminProvider {
         'id_parqueo': id_parqueo,
         'direccion': direccion,
         'nombre_parqueo': nombre_parqueo,
-        'imagenes': imagenes, 
+        'imagenes': imagenes,
         'id_usuario': id_usuario,
         'nombre_usuario': nombre_usuario,
         'telefono': telefono,
         'modelo_auto': modelo_auto,
         'placa_auto': placa_auto,
         'fecha': fecha,
-	      'hora_deentrada': hora_deentrada,
-	      'hora_desalida': hora_desalida,
-	      'precio': precio,
+        'hora_deentrada': hora_deentrada,
+        'hora_desalida': hora_desalida,
+        'precio': precio,
         'parqueo_control_pagos': parqueo_control_pagos
       });
 
@@ -160,13 +210,6 @@ class ServiciosadminProvider {
       return null;
     }
   }
-
-   
-
-
-
-
-
 
   // Obtener historial de servicios por usuario
   Future<List<Servicioadmin>> userhistory(String id_usuario) async {
@@ -192,7 +235,7 @@ class ServiciosadminProvider {
     }
   }
 
-  // Obtener historial de servicios por paruqeo con imagen 
+  // Obtener historial de servicios por paruqeo con imagen
   Future<List<Servicioadminimagen>> parkhistory(String id_parqueo) async {
     try {
       Uri url = Uri.http(_url, '$_api/historyadmin');
@@ -218,8 +261,9 @@ class ServiciosadminProvider {
 
 //obtener servicios actuales
 
-  // Obtener historial de servicios por paruqeo con imagen 
-  Future<List<Servicioadminimagen>> parkhistoryactuales(String id_parqueo) async {
+  // Obtener historial de servicios por paruqeo con imagen
+  Future<List<Servicioadminimagen>> parkhistoryactuales(
+      String id_parqueo) async {
     try {
       Uri url = Uri.http(_url, '$_api/historyadminactual');
 
@@ -242,13 +286,55 @@ class ServiciosadminProvider {
     }
   }
 
+  Future<List<Serviciotrue>> parkhistorytrue(String id_parqueo) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/historyservices');
 
+      String bodyParams = json.encode({
+        'id_parqueo': id_parqueo,
+      });
 
+      Map<String, String> headers = {'Content-type': 'application/json'};
 
-   //
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      print(data);
 
+      Serviciotrue servicio = Serviciotrue.fromJsonList(data);
+      print(servicio.toList);
+      return servicio.toList;
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
 
-    Future<ResponseApi> getservicebool(String id_servicio) async {
+  Future<List<Serviciotrue>> parkhistorytruesorry(String id_parqueo) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/historyservicesactuales');
+
+      String bodyParams = json.encode({
+        'id_parqueo': id_parqueo,
+      });
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      print(data);
+
+      Serviciotrue servicio = Serviciotrue.fromJsonList(data);
+      print(servicio.toList);
+      return servicio.toList;
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
+
+  //
+
+  Future<ResponseApi> getservicebool(String id_servicio) async {
     try {
       Uri url = Uri.http(_url, '$_api/servicesboolean');
 
@@ -269,8 +355,7 @@ class ServiciosadminProvider {
     }
   }
 
-
-   Future<ResponseApi> getserviceboolfinish(String id_servicio) async {
+  Future<ResponseApi> getserviceboolfinish(String id_servicio) async {
     try {
       Uri url = Uri.http(_url, '$_api/servicesbooleanfinish');
 
@@ -290,10 +375,4 @@ class ServiciosadminProvider {
       return null;
     }
   }
-
-
-
-
-
-
 }

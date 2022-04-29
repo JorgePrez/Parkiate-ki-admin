@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:parkline/models/prize.dart';
 import 'package:parkline/models/servicioadmin.dart';
+import 'package:parkline/models/serviciotrue.dart';
 import 'package:parkline/providers/parqueos_provider.dart';
 
 import 'package:parkline/utils/dimensions.dart';
@@ -21,9 +22,9 @@ import 'package:parkline/providers/serviciosadmin_provider.dart';
 
 import 'package:intl/intl.dart';
 
-
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ScanPage extends StatefulWidget {
   @override
@@ -33,11 +34,11 @@ class ScanPage extends StatefulWidget {
 class _ScanPageState extends State<ScanPage> {
   String qrCodeResult;
 
-  final String inicio ="Servicio registrado"; 
+  final String inicio = "Servicio registrado";
 
-  final String fin= "Hora de salida registrada";
+  final String fin = "Hora de salida registrada";
 
-  String mensaje="";
+  String mensaje = "";
 
   bool backCamera = false;
 
@@ -48,7 +49,6 @@ class _ScanPageState extends State<ScanPage> {
           backgroundColor: CustomColor.primaryColor,
           title: Text("Presiona este botón ---->"),
           actions: <Widget>[
-        
             IconButton(
               icon: Icon(MaterialCommunityIcons.qrcode_scan),
               onPressed: () async {
@@ -58,201 +58,120 @@ class _ScanPageState extends State<ScanPage> {
                   ),
                 ); //barcode scnner
 
-                String preqrCodeResult =  codeSanner.rawContent;
+                String preqrCodeResult = codeSanner.rawContent;
 
-                              int tipodepeticion =2;
+                int tipodepeticion = 2;
 
-                                              final ServiciosadminProvider serviciosProvider = new ServiciosadminProvider();
+                final ServiciosadminProvider serviciosProvider =
+                    new ServiciosadminProvider();
 
-                                                final ParqueosProvider parqueosProvider =
+                final ParqueosProvider parqueosProvider =
                     new ParqueosProvider();
 
+                if ((preqrCodeResult == null) || (preqrCodeResult == "")) {
+                  tipodepeticion = 2;
+                } else {
+                  if (preqrCodeResult.length > 50) {
+                    tipodepeticion == 1;
+                    if (await canLaunch(preqrCodeResult)) {
+                      await launch(preqrCodeResult);
+                    } else {
+                      throw 'No se puede leer el link: $preqrCodeResult';
+                    }
+                  } else {
+                    // Obtener el servicio que ya esta registrado
+                    /*   final splitted = preqrCodeResult.split(':');
 
+                    final String codigo = splitted[0];
 
-                 if ((preqrCodeResult == null)||(preqrCodeResult == "")){
+                    final String id = splitted[1];*/
 
-                   tipodepeticion =2;
+                    ResponseApi responseApi2 =
+                        await serviciosProvider.getByIdtrue(preqrCodeResult);
 
+                    Serviciotrue serviciorecuperado =
+                        Serviciotrue.fromJson(responseApi2.data);
 
+                    ResponseApi responseApitafias = await parqueosProvider
+                        .getprize(serviciorecuperado.idParqueo);
 
-                 }
-                 else{
+                    Prize prize = Prize.fromJson(responseApitafias.data);
 
+                    //Calcuar el precio a cobrar segun la cantidad de horas/minutos
 
-                final splitted = preqrCodeResult.split(':');
+                    final currentTime = DateFormat.Hm().format(DateTime.now());
 
-                final String codigo = splitted[0];
+                    var format = DateFormat("HH:mm");
+                    var start = format.parse(serviciorecuperado.horaDeentrada);
+                    var end = format.parse(currentTime);
 
-                final String id =splitted[1];
+                    Duration diferenciafake =
+                        end.difference(start); // prints 7:40
 
+                    String diferenciaString = diferenciafake.toString();
+                    String diferenciaString2 =
+                        diferenciaString.substring(0, 4); // 'art'
 
+                    //TODO: ERROR SI PASA DE 10 HORAS: 10.5
 
+                    String horas = diferenciaString2.substring(0, 1);
+                    String minutos = diferenciaString2.substring(2);
 
+                    //widget.diferencia = "horas: " + horas + "-" + "minutos: " + minutos;
 
-                if(codigo.length==3){ 
+                    int totalhoras = int.parse(horas);
 
+                    int totalminutos = int.parse(minutos);
 
+                    int precioporhora = int.parse(prize.hora);
+                    int preciopormediahora = int.parse(prize.mediaHora);
 
+                    int preciototal = 0;
 
+                    if (totalhoras > 0) {
+                      preciototal = precioporhora * totalhoras;
 
-                Servicioadmin servicioadmin = new Servicioadmin(
-                idServicio: id,
-                idParqueo: 'N/A',
-                direccion: 'N/A',
-                nombreParqueo: 'N/A',
-                imagenes: 'N/A',
-                idUsuario: 'N/A',
-                nombreUsuario: 'N/A',
-                telefono: 'N/A',
-                modeloAuto: 'N/A',
-                placaAuto: 'N/A',
-                fecha: 'N/A',
-                horaDeentrada: 'N/A',
-                horaDesalida: 'N/A',
-                precio: 'N/A',
-                parqueoControlPagos: 'N/A',
-              );
-      
-              ResponseApi responseApi =
-                  await serviciosProvider.create(servicioadmin);
-      
-              print('RESPUESTA: ${responseApi.toJson()}');
+                      if (totalminutos < 30) {
+                        preciototal = preciototal + preciopormediahora;
+                      } else {
+                        preciototal = preciototal + precioporhora;
+                      }
+                    } else {
+                      if (totalminutos < 30) {
+                        preciototal = preciopormediahora;
+                      } else {
+                        preciototal = precioporhora;
+                      }
+                    }
+                    String precio = preciototal.toString();
 
-      
-              if (responseApi.success) {
-                tipodepeticion= 0;
-                //  NotificationsService.showSnackbar(responseApi.message);
-              } else {
-                NotificationsService.showSnackbar(responseApi.message);
-              }
+                    //Actaulizar la hora de salida y el precio a cobrar
 
+                    ResponseApi responseApi5 = await serviciosProvider
+                        .updatetrue(preqrCodeResult, currentTime, precio);
+
+                    if (responseApi5.success) {
+                      tipodepeticion = 1;
+                    } else {}
+                  }
                 }
-
-                else{
-
-            
-
-
-                  // Obtener el servicio que ya esta registrado
-
-                     ResponseApi responseApi2 = await serviciosProvider.getById(id);
-
-                    
-                Servicioadmin serviciorecuperado =
-                    Servicioadmin.fromJson(responseApi2.data);
-
-
-                    
-                ResponseApi responseApitafias = await parqueosProvider
-                    .getprize(serviciorecuperado.idParqueo);
-
-                Prize prize = Prize.fromJson(responseApitafias.data);
-
-
-
-
-                  //Calcuar el precio a cobrar segun la cantidad de horas/minutos
-
-                      final currentTime = DateFormat.Hm().format(DateTime.now());
-
-
-
-                   var format = DateFormat("HH:mm");
-     var start = format.parse(serviciorecuperado.horaDeentrada);
-     var end = format.parse(currentTime);
-
-
-
-    Duration diferenciafake = end.difference(start); // prints 7:40
-
-    String diferenciaString = diferenciafake.toString();
-    String diferenciaString2 = diferenciaString.substring(0, 4); // 'art'
-
-    String horas = diferenciaString2.substring(0, 1);
-    String minutos = diferenciaString2.substring(2);
-
-    //widget.diferencia = "horas: " + horas + "-" + "minutos: " + minutos;
-
-    int totalhoras = int.parse(horas);
-
-    int totalminutos = int.parse(minutos);
-
-    int precioporhora = int.parse(prize.hora);
-    int preciopormediahora = int.parse(prize.mediaHora);
-
-    int preciototal = 0;
-
-    if (totalhoras > 0) {
-      preciototal = precioporhora * totalhoras;
-
-      if (totalminutos < 30) {
-        preciototal = preciototal + preciopormediahora;
-      } else {
-        preciototal = preciototal + precioporhora;
-      }
-    } else {
-      if (totalminutos < 30) {
-        preciototal = preciopormediahora;
-      } else {
-        preciototal = precioporhora;
-      }
-    }
-    String precio = preciototal.toString();
-
-
-                  //Actaulizar la hora de salida y el precio a cobrar 
-
-
- ResponseApi responseApi5 = await serviciosProvider.update(
-                  id, 
-                  currentTime ,
-                   precio);
-
-
-              if (responseApi5.success) {
-             tipodepeticion=1;
-              }
-              else{
-
-              }
-
-
-
-                }
-
-
-                 }
 
                 //SI EL QR NO ES NULL O NO ESTA VACIO VOY AL ENDOIND
 
                 //DE LO CONTRARIO NO HAGO NADA
 
-              //  String codigo= "lets kill this love";
+                //  String codigo= "lets kill this love";
                 setState(() {
-
-                  if(tipodepeticion==0){
-
+                  if (tipodepeticion == 0) {
                     mensaje = inicio;
-
-
+                  } else if (tipodepeticion == 1) {
+                    mensaje = fin;
+                  } else {
+                    mensaje = "QR";
                   }
-
-                  else if(tipodepeticion==1){
-
-                    mensaje= fin;
-                    
-                  }
-                  else{
-                    mensaje= "Error al escanear QR";
-                  }
-
-
-
-
-               
 
                   //PETICCION HHTTP
-                  qrCodeResult =  codeSanner.rawContent;
+                  qrCodeResult = codeSanner.rawContent;
                 });
               },
             )
@@ -260,7 +179,7 @@ class _ScanPageState extends State<ScanPage> {
         ),
         body: Center(
           child: Text(
-            (qrCodeResult == null)||(qrCodeResult == "")
+            (qrCodeResult == null) || (qrCodeResult == "")
                 ? "Escanea para ver el resultado del QR"
                 : mensaje,
             style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w900),
