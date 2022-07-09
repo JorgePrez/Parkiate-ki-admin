@@ -19,7 +19,7 @@
 
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:label="Parkiate-Ki_Admin "
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
