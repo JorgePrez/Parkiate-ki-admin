@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parkline/models/duenio.dart';
+import 'package:parkline/models/adminparqueo.dart';
 import 'package:parkline/models/espacios2.dart';
 import 'package:parkline/models/parqueo.dart';
 import 'package:parkline/models/parqueofirebase.dart';
@@ -124,34 +124,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   TextFormField(
                     style: CustomStyle.textStyle,
-                    controller: parkController,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'Por favor completa el campo';
-                      } else {
-                        return null;
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Código de parqueo(ver en el sitio web)',
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 10.0),
-                      labelStyle: CustomStyle.textStyle,
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintStyle: CustomStyle.textStyle,
-                      focusedBorder: CustomStyle.focusBorder,
-                      enabledBorder: CustomStyle.focusErrorBorder,
-                      focusedErrorBorder: CustomStyle.focusErrorBorder,
-                      errorBorder: CustomStyle.focusErrorBorder,
-                    ),
-                  ),
-                  SizedBox(
-                    height: Dimensions.heightSize,
-                  ),
-                  TextFormField(
-                    style: CustomStyle.textStyle,
                     controller: passwordController,
                     validator: (String value) {
                       if (value.isEmpty) {
@@ -215,20 +187,74 @@ class _SignInScreenState extends State<SignInScreen> {
               final ParqueosProvider parqueosProvider = new ParqueosProvider();
 
               String email = emailController.text.trim();
-              String park = parkController.text.trim();
+
               String password = passwordController.text.trim();
 
-              ResponseApi responseApicantidad =
-                  await parqueosProvider.login(email, password);
+              if ((email.length > 0) && (password.length > 0)) {
+                print('${email} + ${password}');
 
-              print('Respuesta object: ${responseApicantidad}');
-              print('RESPUESTA: ${responseApicantidad.toJson()}');
+                ResponseApi responseApiloginAdmin =
+                    await parqueosProvider.login(email, password);
 
-              Espacios2 cantidad = Espacios2.fromJson(responseApicantidad.data);
+                print('Respuesta object: ${responseApiloginAdmin}');
+                print('RESPUESTA: ${responseApiloginAdmin.toJson()}');
 
-              String number = cantidad.espaciosOcupados;
-              int amount = int.parse(number);
+                if (responseApiloginAdmin.success) {
+                  Adminparqueo admin_parqueo =
+                      Adminparqueo.fromJson(responseApiloginAdmin.data);
 
+                  ResponseApi responseApifindparqueo = await parqueosProvider
+                      .getparkbyidfirebase(admin_parqueo.idParqueo);
+
+                  Parqueofirebase elparqueo =
+                      Parqueofirebase.fromJson(responseApifindparqueo.data);
+
+                  //rEGISTRAR TOKEN:------
+
+                  _sharedPref.save('user', elparqueo.toJson());
+
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => DashboardScreen(
+                            id_parqueo: elparqueo.idParqueo,
+                            id_duenio: elparqueo.idDuenio,
+                            nombre_empresa: elparqueo.nombreEmpresa,
+                            direccion: elparqueo.direccion,
+                            capacidad_maxima: elparqueo.capacidadMaxima,
+                            media_hora: elparqueo.mediaHora,
+                            hora: elparqueo.hora,
+                            dia: elparqueo.dia,
+                            mes: elparqueo.mes,
+                            lunes_apertura: elparqueo.lunesApertura,
+                            lunes_cierres: elparqueo.lunesCierre,
+                            domingo_apertura: elparqueo.domingoApertura,
+                            domingo_cierre: elparqueo.domingoCierre,
+                            detalles: elparqueo.detalles,
+                            imagenes: elparqueo.imagenes,
+                            latitude: elparqueo.latitude,
+                            longitude: elparqueo.longitude,
+                            martes_apertura: elparqueo.martesApertura,
+                            martes_cierre: elparqueo.martesCierre,
+                            miercoles_apertura: elparqueo.miercolesApertura,
+                            miercoles_cierre: elparqueo.miercolesCierre,
+                            jueves_apertura: elparqueo.juevesApertura,
+                            jueves_cierre: elparqueo.juevesCierre,
+                            viernes_apertura: elparqueo.viernesApertura,
+                            viernes_cierre: elparqueo.viernesCierre,
+                            sabado_apertura: elparqueo.sabadoApertura,
+                            sabado_cierre: elparqueo.sabadoCierre,
+                            control_pagos: elparqueo.controlPagos,
+                            correo: email,
+                            id_parqueo_firebase: elparqueo.idFirebase,
+                          )));
+                } else {
+                  NotificationsService.showSnackbar(
+                      responseApiloginAdmin.message);
+                }
+              } else {
+                NotificationsService.showSnackbar('Completa todos los campos');
+              }
+
+/*
               if (amount == 1) {
                 //Obtener datos de administrador
 
@@ -303,7 +329,7 @@ class _SignInScreenState extends State<SignInScreen> {
               } else {
                 NotificationsService.showSnackbar(
                     "Correo o Contraseña no coinciden");
-              }
+              }*/
             },
           ),
           SizedBox(height: Dimensions.heightSize * 3),

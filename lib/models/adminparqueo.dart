@@ -53,14 +53,15 @@ class Duenio {
 
 import 'dart:convert';
 
-Duenio userFromJson(String str) => Duenio.fromJson(json.decode(str));
+Adminparqueo adminParqueoFromJson(String str) =>
+    Adminparqueo.fromJson(json.decode(str));
 
-String userToJson(Duenio data) => json.encode(data.toJson());
+String adminParqueoToJson(Adminparqueo data) => json.encode(data.toJson());
 
-class Duenio {
+class Adminparqueo {
   String idDuenio;
-  String nombre;
-  String correoo;
+  String email;
+  String idParqueo;
 
   /* 
   ESTO ES LO QUE ESTAMOS HACIENDO AQUI
@@ -69,26 +70,26 @@ class Duenio {
   }
 
 */
-  Duenio({
+  Adminparqueo({
     this.idDuenio,
-    this.nombre,
-    this.correoo,
+    this.email,
+    this.idParqueo,
   });
 
   /* RECIBE LLAVE Y VALOR (JSON) Y NOS RETORNA UN OBJETO DE TIPO USER (esta clase)
   */
 
-  factory Duenio.fromJson(Map<String, dynamic> json) => Duenio(
+  factory Adminparqueo.fromJson(Map<String, dynamic> json) => Adminparqueo(
         idDuenio: json["id_duenio"],
-        nombre: json["nombre"],
-        correoo: json["correoo"],
+        email: json["email"],
+        idParqueo: json["id_parqueo"],
       );
 
   /* TOMA EL OBJECOT USER Y LO T5ANSFORMA A UN OBJETO JSON  */
 
   Map<String, dynamic> toJson() => {
         "id_duenio": idDuenio,
-        "nombre": nombre,
-        "correoo": correoo,
+        "email": email,
+        "id_parqueo": idParqueo,
       };
 }

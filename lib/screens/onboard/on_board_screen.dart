@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parkline/models/adminparqueo.dart';
 import 'package:parkline/models/duenio.dart';
 import 'package:parkline/models/parqueo.dart';
 import 'package:parkline/models/parqueofirebase.dart';
@@ -143,8 +144,9 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
 
                                     print(responseApiduenobyemail.data);
 
-                                    Duenio duenio = Duenio.fromJson(
-                                        responseApiduenobyemail.data);
+                                    Adminparqueo admin_parqueo =
+                                        Adminparqueo.fromJson(
+                                            responseApiduenobyemail.data);
 
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -199,7 +201,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                                                       elparqueo.sabadoCierre,
                                                   control_pagos:
                                                       elparqueo.controlPagos,
-                                                  correo: duenio.correoo,
+                                                  correo: admin_parqueo.email,
                                                   id_parqueo_firebase:
                                                       elparqueo.idFirebase,
                                                 )));

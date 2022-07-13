@@ -150,12 +150,11 @@ class ParqueosProvider {
     }
   }
 
-  Future<ResponseApi> login(String id_parqueo, String contrasenia) async {
+  Future<ResponseApi> login(String email, String password) async {
     try {
       Uri url = Uri.http(_url, '$_api/login');
 
-      String bodyParams =
-          json.encode({'id_parqueo': id_parqueo, 'contrasenia': contrasenia});
+      String bodyParams = json.encode({'email': email, 'password': password});
 
       Map<String, String> headers = {'Content-type': 'application/json'};
 
@@ -214,7 +213,7 @@ class ParqueosProvider {
     try {
       Uri url = Uri.http(_url, '$_api/dueniobyid');
 
-      String bodyParams = json.encode({'correoo': id_duenio});
+      String bodyParams = json.encode({'id_duenio': id_duenio});
 
       Map<String, String> headers = {'Content-type': 'application/json'};
 
