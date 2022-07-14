@@ -170,7 +170,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Mi parqueo',
+                    'Información Sobre Parqueo',
                     style: CustomStyle.listStyle,
                   ),
                   trailing: Icon(Icons.local_parking_outlined),
@@ -182,6 +182,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     var det2;
                     var det3;
                     var det4;
+
+                    /* TODO: 
+                    cambiar esta parte como la app movil
+                    */
 
                     if (arr[0] == '1') {
                       det1 =
@@ -417,10 +421,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Servicios Actuales',
+                    'Entradas y Salidas Por Placa',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.airport_shuttle_outlined),
+                  trailing: Icon(Icons.camera_enhance_outlined),
                   onTap: () async {
                     List<Serviciotrue> lista = await serviciosProvider
                         .parkhistorytruesorry(widget.id_parqueo);
@@ -443,13 +447,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Historial de Servicios',
+                    "Ver Espacios ( libres / ocupados)",
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.history_edu_outlined),
+                  trailing: Icon(Icons.grid_view_outlined),
+                  onTap: () async {
+                    Navigator.of(context).pop();
+
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => EstadoParqueo(
+                              id_parqueo_firebase: widget.id_parqueo_firebase,
+                            )));
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: Dimensions.marginSize,
+                      right: Dimensions.marginSize),
+                  child: Divider(
+                    color: Colors.black.withOpacity(0.4),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Escanear QR de Clientes ( usuarios que han descargado la app móvil)',
+                    style: CustomStyle.listStyle,
+                  ),
+                  trailing: Icon(Icons.qr_code_2_outlined),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => ScanPage()));
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: Dimensions.marginSize,
+                      right: Dimensions.marginSize),
+                  child: Divider(
+                    color: Colors.black.withOpacity(0.4),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Visitas dentro de tu parqueo de usuarios desde la app móvil',
+                    style: CustomStyle.listStyle,
+                  ),
+                  trailing: Icon(Icons.mobile_friendly_outlined),
                   onTap: () async {
                     List<Serviciotrue> lista = await serviciosProvider
-                        .parkhistorytrue(widget.id_parqueo);
+                        .parkhistorytruesorry(widget.id_parqueo);
 
                     print(lista);
 
@@ -469,37 +516,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Escanear QR de usuario',
+                    'Historial de visitas de usuarios desde app móvil',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.qr_code_2_rounded),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => ScanPage()));
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    "Espacios de mi estacionamiento",
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.dashboard_outlined),
+                  trailing: Icon(Icons.history_outlined),
                   onTap: () async {
-                    Navigator.of(context).pop();
+                    List<Serviciotrue> lista = await serviciosProvider
+                        .parkhistorytrue(widget.id_parqueo);
 
+                    print(lista);
+
+                    Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => EstadoParqueo(
-                              id_parqueo_firebase: widget.id_parqueo_firebase,
-                            )));
+                        builder: (context) =>
+                            ParkingHistoryScreen(listaservicios: lista)));
                   },
                 ),
                 Padding(
