@@ -30,6 +30,7 @@ import 'package:parkline/screens/onboard/on_board_screen.dart';
 import 'package:parkline/pages/map_markers.dart';
 import 'package:provider/provider.dart';
 import 'package:parkline/firebase_crud/skillshare.dart';
+import 'package:parkline/models/option_model.dart';
 
 String selectedVehicle = 'assets/images/vehicle/tourism.png';
 String selectedVehicle2;
@@ -110,6 +111,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  int _selectedOption = 0;
+
   List<Parqueo> listaconcidencias = [];
 
   SharedPref _sharedPref = new SharedPref();
@@ -157,405 +160,416 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ),*/
 
       child: Scaffold(
-          key: scaffoldKey,
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                  child: profileWidget(context),
-                  decoration: BoxDecoration(
-                    color: CustomColor.primaryColor,
-                  ),
+        key: scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: CustomColor.primaryColor,
+          // title: Text('Opciones de administrador de parqueo'),
+          title: Text(
+            '${widget?.nombre_empresa ?? ''}',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: Dimensions.extraLargeTextSize,
+                fontWeight: FontWeight.bold),
+          ),
+          /*leading: FlatButton(
+              textColor: Colors.white,
+              child: Icon(
+                Icons.arrow_back,
+              ),
+              onPressed: () => print('Back'),
+            ),*/
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: profileWidget(context),
+                decoration: BoxDecoration(
+                  color: CustomColor.primaryColor,
                 ),
-                ListTile(
-                  title: Text(
-                    'Información Sobre Parqueo',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.local_parking_outlined),
-                  onTap: () async {
-                    var longlatitud = double.parse(widget.latitude);
-                    var longlongitud = double.parse(widget.longitude);
-                    var arr = widget.detalles.split(' ');
-                    var det1;
-                    var det2;
-                    var det3;
-                    var det4;
+              ),
+              ListTile(
+                title: Text(
+                  'Información Sobre Parqueo',
+                  style: CustomStyle.listStyle,
+                ),
+                trailing: Icon(Icons.local_parking_outlined),
+                onTap: () async {
+                  var longlatitud = double.parse(widget.latitude);
+                  var longlongitud = double.parse(widget.longitude);
+                  var arr = widget.detalles.split(' ');
+                  var det1;
+                  var det2;
+                  var det3;
+                  var det4;
 
-                    /* TODO: 
+                  /* TODO: 
                     cambiar esta parte como la app movil
                     */
 
-                    if (arr[0] == '1') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                    } else if (arr[0] == '2') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                    } else if (arr[0] == '3') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                    } else if (arr[0] == '4') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                    } else if (arr[0] == '5') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                    } else if (arr[0] == '6') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                    } else if (arr[0] == '7') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                    } else if (arr[0] == '8') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                    } else if (arr[0] == '9') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                    } else if (arr[0] == 'A') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                    } else if (arr[0] == 'B') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                    } else if (arr[0] == 'C') {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                    } else {
-                      det1 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                    }
+                  if (arr[0] == '1') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
+                  } else if (arr[0] == '2') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
+                  } else if (arr[0] == '3') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
+                  } else if (arr[0] == '4') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
+                  } else if (arr[0] == '5') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
+                  } else if (arr[0] == '6') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
+                  } else if (arr[0] == '7') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
+                  } else if (arr[0] == '8') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
+                  } else if (arr[0] == '9') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
+                  } else if (arr[0] == 'A') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
+                  } else if (arr[0] == 'B') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
+                  } else if (arr[0] == 'C') {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
+                  } else {
+                    det1 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
+                  }
 
-                    if (arr[1] == '1') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                    } else if (arr[1] == '2') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                    } else if (arr[1] == '3') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                    } else if (arr[1] == '4') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                    } else if (arr[1] == '5') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                    } else if (arr[1] == '6') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                    } else if (arr[1] == '7') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                    } else if (arr[1] == '8') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                    } else if (arr[1] == '9') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                    } else if (arr[1] == 'A') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                    } else if (arr[1] == 'B') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                    } else if (arr[1] == 'C') {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                    } else {
-                      det2 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                    }
+                  if (arr[1] == '1') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
+                  } else if (arr[1] == '2') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
+                  } else if (arr[1] == '3') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
+                  } else if (arr[1] == '4') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
+                  } else if (arr[1] == '5') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
+                  } else if (arr[1] == '6') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
+                  } else if (arr[1] == '7') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
+                  } else if (arr[1] == '8') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
+                  } else if (arr[1] == '9') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
+                  } else if (arr[1] == 'A') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
+                  } else if (arr[1] == 'B') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
+                  } else if (arr[1] == 'C') {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
+                  } else {
+                    det2 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
+                  }
 
-                    if (arr[2] == '1') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                    } else if (arr[2] == '2') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                    } else if (arr[2] == '3') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                    } else if (arr[2] == '4') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                    } else if (arr[2] == '5') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                    } else if (arr[2] == '6') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                    } else if (arr[2] == '7') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                    } else if (arr[2] == '8') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                    } else if (arr[2] == '9') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                    } else if (arr[2] == 'A') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                    } else if (arr[2] == 'B') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                    } else if (arr[2] == 'C') {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                    } else {
-                      det3 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                    }
+                  if (arr[2] == '1') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
+                  } else if (arr[2] == '2') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
+                  } else if (arr[2] == '3') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
+                  } else if (arr[2] == '4') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
+                  } else if (arr[2] == '5') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
+                  } else if (arr[2] == '6') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
+                  } else if (arr[2] == '7') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
+                  } else if (arr[2] == '8') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
+                  } else if (arr[2] == '9') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
+                  } else if (arr[2] == 'A') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
+                  } else if (arr[2] == 'B') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
+                  } else if (arr[2] == 'C') {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
+                  } else {
+                    det3 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
+                  }
 
-                    if (arr[3] == '1') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                    } else if (arr[3] == '2') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                    } else if (arr[3] == '3') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                    } else if (arr[3] == '4') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                    } else if (arr[3] == '5') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                    } else if (arr[3] == '6') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                    } else if (arr[3] == '7') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                    } else if (arr[3] == '8') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                    } else if (arr[3] == '9') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                    } else if (arr[3] == 'A') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                    } else if (arr[3] == 'B') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                    } else if (arr[3] == 'C') {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                    } else {
-                      det4 =
-                          'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                    }
+                  if (arr[3] == '1') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
+                  } else if (arr[3] == '2') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
+                  } else if (arr[3] == '3') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
+                  } else if (arr[3] == '4') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
+                  } else if (arr[3] == '5') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
+                  } else if (arr[3] == '6') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
+                  } else if (arr[3] == '7') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
+                  } else if (arr[3] == '8') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
+                  } else if (arr[3] == '9') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
+                  } else if (arr[3] == 'A') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
+                  } else if (arr[3] == 'B') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
+                  } else if (arr[3] == 'C') {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
+                  } else {
+                    det4 =
+                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
+                  }
 
-                    List<Resenia> listar =
-                        await reseniasProvider.reviewsbyPark(widget.id_parqueo);
+                  List<Resenia> listar =
+                      await reseniasProvider.reviewsbyPark(widget.id_parqueo);
 
-                    //Obtener cantidad de espacios disponbiles
+                  //Obtener cantidad de espacios disponbiles
 
-                    ResponseApi responseApiespacios =
-                        await parqueosProvider.getslots(widget.id_parqueo);
+                  ResponseApi responseApiespacios =
+                      await parqueosProvider.getslots(widget.id_parqueo);
 
-                    Espacios espacios =
-                        Espacios.fromJson(responseApiespacios.data);
+                  Espacios espacios =
+                      Espacios.fromJson(responseApiespacios.data);
 
-                    String ocupados = espacios.espaciosOcupados;
-                    int espaciodisponibles =
-                        int.parse(widget.capacidad_maxima) -
-                            int.parse(ocupados);
+                  String ocupados = espacios.espaciosOcupados;
+                  int espaciodisponibles =
+                      int.parse(widget.capacidad_maxima) - int.parse(ocupados);
 
-                    String espacioslibres = espaciodisponibles.toString();
+                  String espacioslibres = espaciodisponibles.toString();
 
-                    print('ESPACIOS: ${espacioslibres}');
+                  print('ESPACIOS: ${espacioslibres}');
 
-                    // print(listar);
+                  // print(listar);
 
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ParkingPointDetailsScreen(
-                            idpark: widget.id_parqueo,
-                            name: widget
-                                .nombre_empresa, //        name: parkingPoint.name,
-                            amount: widget.capacidad_maxima,
-                            image: widget.imagenes,
-                            address: widget.direccion,
-                            slots: espacioslibres,
-                            mediahora: widget.media_hora,
-                            hora: widget.hora,
-                            dia: widget.dia,
-                            mes: widget.mes,
-                            lunesEntrada: widget.lunes_apertura,
-                            lunesCierre: widget.lunes_cierres,
-                            martesEntrada: widget.martes_apertura,
-                            martesSalida: widget.martes_cierre,
-                            detalles: widget.detalles,
-                            detalles1: det1,
-                            detalles2: det2,
-                            detalles3: det3,
-                            detalles4: det4,
-                            latitude: longlatitud,
-                            longitude: longlongitud,
-                            miercolesEntrada: widget.miercoles_apertura,
-                            miercolesSalida: widget.miercoles_cierre,
-                            juevesEntrada: widget.jueves_apertura,
-                            juevesSalida: widget.jueves_cierre,
-                            viernesEntrada: widget.viernes_apertura,
-                            viernesSalida: widget.viernes_cierre,
-                            sabadoEntrada: widget.sabado_apertura,
-                            sabadoSalida: widget.sabado_cierre,
-                            domingoEntrada: widget.domingo_apertura,
-                            domingoSalida: widget.domingo_cierre,
-                            controlPagos: widget.control_pagos,
-                            listaresenias: listar)));
-                  },
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ParkingPointDetailsScreen(
+                          idpark: widget.id_parqueo,
+                          name: widget
+                              .nombre_empresa, //        name: parkingPoint.name,
+                          amount: widget.capacidad_maxima,
+                          image: widget.imagenes,
+                          address: widget.direccion,
+                          slots: espacioslibres,
+                          mediahora: widget.media_hora,
+                          hora: widget.hora,
+                          dia: widget.dia,
+                          mes: widget.mes,
+                          lunesEntrada: widget.lunes_apertura,
+                          lunesCierre: widget.lunes_cierres,
+                          martesEntrada: widget.martes_apertura,
+                          martesSalida: widget.martes_cierre,
+                          detalles: widget.detalles,
+                          detalles1: det1,
+                          detalles2: det2,
+                          detalles3: det3,
+                          detalles4: det4,
+                          latitude: longlatitud,
+                          longitude: longlongitud,
+                          miercolesEntrada: widget.miercoles_apertura,
+                          miercolesSalida: widget.miercoles_cierre,
+                          juevesEntrada: widget.jueves_apertura,
+                          juevesSalida: widget.jueves_cierre,
+                          viernesEntrada: widget.viernes_apertura,
+                          viernesSalida: widget.viernes_cierre,
+                          sabadoEntrada: widget.sabado_apertura,
+                          sabadoSalida: widget.sabado_cierre,
+                          domingoEntrada: widget.domingo_apertura,
+                          domingoSalida: widget.domingo_cierre,
+                          controlPagos: widget.control_pagos,
+                          listaresenias: listar)));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
+              ),
+              ListTile(
+                title: Text(
+                  'Entradas y Salidas Por Placa',
+                  style: CustomStyle.listStyle,
                 ),
-                ListTile(
-                  title: Text(
-                    'Entradas y Salidas Por Placa',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.camera_enhance_outlined),
-                  onTap: () async {
-                    List<Serviciotrue> lista = await serviciosProvider
-                        .parkhistorytruesorry(widget.id_parqueo);
+                trailing: Icon(Icons.camera_enhance_outlined),
+                onTap: () async {
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
 
-                    print(lista);
+                  print(lista);
 
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            ParkingHistoryScreen(listaservicios: lista)));
-                  },
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
+              ),
+              ListTile(
+                title: Text(
+                  "Ver Espacios ( libres / ocupados)",
+                  style: CustomStyle.listStyle,
                 ),
-                ListTile(
-                  title: Text(
-                    "Ver Espacios ( libres / ocupados)",
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.grid_view_outlined),
-                  onTap: () async {
-                    Navigator.of(context).pop();
+                trailing: Icon(Icons.grid_view_outlined),
+                onTap: () async {
+                  Navigator.of(context).pop();
 
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => EstadoParqueo(
-                              id_parqueo_firebase: widget.id_parqueo_firebase,
-                            )));
-                  },
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => EstadoParqueo(
+                            id_parqueo_firebase: widget.id_parqueo_firebase,
+                          )));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
+              ),
+              ListTile(
+                title: Text(
+                  'Escanear QR de Clientes ( usuarios que han descargado la app móvil)',
+                  style: CustomStyle.listStyle,
                 ),
-                ListTile(
-                  title: Text(
-                    'Escanear QR de Clientes ( usuarios que han descargado la app móvil)',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.qr_code_2_outlined),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => ScanPage()));
-                  },
+                trailing: Icon(Icons.qr_code_2_outlined),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ScanPage()));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
+              ),
+              ListTile(
+                title: Text(
+                  'Visitas dentro de tu parqueo de usuarios desde la app móvil',
+                  style: CustomStyle.listStyle,
                 ),
-                ListTile(
-                  title: Text(
-                    'Visitas dentro de tu parqueo de usuarios desde la app móvil',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.mobile_friendly_outlined),
-                  onTap: () async {
-                    List<Serviciotrue> lista = await serviciosProvider
-                        .parkhistorytruesorry(widget.id_parqueo);
+                trailing: Icon(Icons.mobile_friendly_outlined),
+                onTap: () async {
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
 
-                    print(lista);
+                  print(lista);
 
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            ParkingHistoryScreen(listaservicios: lista)));
-                  },
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
+              ),
+              ListTile(
+                title: Text(
+                  'Historial de visitas de usuarios desde app móvil',
+                  style: CustomStyle.listStyle,
                 ),
-                ListTile(
-                  title: Text(
-                    'Historial de visitas de usuarios desde app móvil',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.history_outlined),
-                  onTap: () async {
-                    List<Serviciotrue> lista = await serviciosProvider
-                        .parkhistorytrue(widget.id_parqueo);
+                trailing: Icon(Icons.history_outlined),
+                onTap: () async {
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytrue(widget.id_parqueo);
 
-                    print(lista);
+                  print(lista);
 
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            ParkingHistoryScreen(listaservicios: lista)));
-                  },
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
+              ),
+              ListTile(
+                title: Text(
+                  'CERRAR SESIÓN',
+                  style: CustomStyle.listStyle,
                 ),
-                ListTile(
-                  title: Text(
-                    'CERRAR SESIÓN',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.logout),
-                  onTap: () {
-                    //   Navigator.pushReplacementNamed(context, 'signin');
+                trailing: Icon(Icons.logout),
+                onTap: () {
+                  //   Navigator.pushReplacementNamed(context, 'signin');
 
-                    _sharedPref.logout();
+                  _sharedPref.logout();
 
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OnBoardScreen()));
-                  },
-                ),
-                /*Padding(
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => OnBoardScreen()));
+                },
+              ),
+              /*Padding(
                   padding: const EdgeInsets.only(
                       left: Dimensions.marginSize,
                       right: Dimensions.marginSize),
@@ -563,10 +577,70 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: Colors.black.withOpacity(0.4),
                   ),
                 ),*/
-              ],
-            ),
+            ],
           ),
-          body: Container(
+        ),
+        body: ListView.builder(
+          itemCount: options.length + 2,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return SizedBox(height: 15.0);
+            } else if (index == options.length + 1) {
+              return SizedBox(height: 100.0);
+            }
+            return Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: 80.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+                border: _selectedOption == index - 1
+                    ? Border.all(color: Colors.black26)
+                    : null,
+              ),
+              child: ListTile(
+                leading: options[index - 1].icon,
+                title: Text(
+                  options[index - 1].title,
+                  style: TextStyle(
+                    color: _selectedOption == index - 1
+                        ? Colors.black
+                        : Colors.grey[600],
+                  ),
+                ),
+                subtitle: Text(
+                  options[index - 1].subtitle,
+                  style: TextStyle(
+                    color: _selectedOption == index - 1
+                        ? Colors.black
+                        : Colors.grey,
+                  ),
+                ),
+                selected: _selectedOption == index - 1,
+                onTap: () async {
+                  setState(() {
+                    _selectedOption = index - 1;
+                  });
+                  /*
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                          */
+                },
+              ),
+            );
+          },
+        ),
+
+        /*  body: Container(
             /*  child: MaterialApp(
        
       // Scaffold Widget
@@ -648,7 +722,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 )
               ],
             ),
-          )),
+          )*/
+      ),
     );
   }
 
