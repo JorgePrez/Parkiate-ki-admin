@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:parkline/api/environment.dart';
+//import 'package:parkline/data/slot.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/parqueo.dart';
+import 'package:parkline/models/slots.dart';
+
 import 'package:http/http.dart' as http;
 
 class ParqueosProvider {
@@ -225,6 +228,31 @@ class ParqueosProvider {
     } catch (e) {
       print('Error: $e');
       return null;
+    }
+  }
+
+  //Obteniendo todos los slots de un parqueo
+
+  Future<List<Slot>> allslots(String id_parqueo) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/allslots');
+
+      String bodyParams = json.encode({
+        'id_parqueo': id_parqueo,
+      });
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      print(data);
+
+      Slot slot = Slot.fromJsonList(data);
+      print(slot.toList);
+      return slot.toList;
+    } catch (e) {
+      print('Error: $e');
+      return [];
     }
   }
 }

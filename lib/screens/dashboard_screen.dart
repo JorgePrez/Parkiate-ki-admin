@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+//import 'package:parkline/data/slot.dart';
+import 'package:parkline/models/slots.dart';
+
 import 'package:parkline/models/parkingslots.dart';
 import 'package:parkline/models/servicioadmin.dart';
 import 'package:parkline/models/servicioadminimagen.dart';
@@ -470,12 +473,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 trailing: Icon(Icons.grid_view_outlined),
                 onTap: () async {
+                  List<Slot> lista =
+                      await parqueosProvider.allslots((widget.id_parqueo));
+
+                  print(lista);
+
+                  //TODO: HACER AQUI EL WIDGET QUE RECIBIRA LA LISTA
+
+/*
                   Navigator.of(context).pop();
 
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => EstadoParqueo(
                             id_parqueo_firebase: widget.id_parqueo_firebase,
-                          )));
+                          )));*/
                 },
               ),
               Padding(

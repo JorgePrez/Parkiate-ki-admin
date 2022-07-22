@@ -1,48 +1,74 @@
 import 'dart:convert';
 
-class Slots {
+/*
 
 
- String codigo;
-bool estado;
-String idSlot;
-String reservas;
-String id;
+   {   {
+        "id_slot": "H56745",
+        "codigo": "P1",
+        "estado": "N",
+        "reservas": "N",
+        "img_slot": "https://res.cloudinary.com/parkiate-ki/image/upload/v1658458476/parqueos/2CE369/camara_parqueo/P1/avqmjdxiupa8iezjihr7.jpg",
+        "timestamp_cambio_ocupado": "2022-07-21 20:54:33",
+        "timestamp_cambio_vacio": "2022-07-21 20:54:15"
+    },
+    },
 
+ */
+// To parse this JSON data, do
+//
+//     final slot = slotFromJson(jsonString);
 
-  Slots({
+Slot slotFromJson(String str) => Slot.fromJson(json.decode(str));
+
+String slotToJson(Slot data) => json.encode(data.toJson());
+
+class Slot {
+  Slot({
+    this.idSlot,
     this.codigo,
     this.estado,
-    this.idSlot,
     this.reservas,
+    this.imgSlot,
+    this.timestampCambioOcupado,
+    this.timestampCambioVacio,
   });
 
- 
-
-  factory Slots.fromJson(String str) => Slots.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  /*
-  
+  String idSlot;
   String codigo;
-bool estado;
-String id_slot;
-String reservas;
-String id;
-   */
+  String estado;
+  String reservas;
+  String imgSlot;
+  DateTime timestampCambioOcupado;
+  DateTime timestampCambioVacio;
+  List<Slot> toList = [];
 
-  factory Slots.fromMap(Map<String, dynamic> json) => Slots(
+  factory Slot.fromJson(Map<String, dynamic> json) => Slot(
+        idSlot: json["id_slot"],
         codigo: json["codigo"],
         estado: json["estado"],
-        idSlot: json["id_slot"],
         reservas: json["reservas"],
+        imgSlot: json["img_slot"],
+        timestampCambioOcupado:
+            DateTime.parse(json["timestamp_cambio_ocupado"]),
+        timestampCambioVacio: DateTime.parse(json["timestamp_cambio_vacio"]),
       );
 
-  Map<String, dynamic> toMap() => {
+  Slot.fromJsonList(List<dynamic> jsonList) {
+    if (jsonList == null) return;
+    jsonList.forEach((item) {
+      Slot slot = Slot.fromJson(item);
+      toList.add(slot);
+    });
+  }
+
+  Map<String, dynamic> toJson() => {
+        "id_slot": idSlot,
         "codigo": codigo,
         "estado": estado,
-        "id_slot": idSlot,
         "reservas": reservas,
+        "img_slot": imgSlot,
+        "timestamp_cambio_ocupado": timestampCambioOcupado.toIso8601String(),
+        "timestamp_cambio_vacio": timestampCambioVacio.toIso8601String(),
       };
 }
