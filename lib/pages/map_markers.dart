@@ -344,7 +344,7 @@ class _MapMarkersState extends State<MapMarkers> {
                     lunesCierre: parkingPoint.lunesCierre,
                     martesEntrada: parkingPoint.martesEntrada,
                     martesSalida: parkingPoint.martesSalida,
-                    detalles: parkingPoint.detalles,
+                    detalles: arr,
                     detalles1: det1,
                     detalles2: det2,
                     detalles3: det3,

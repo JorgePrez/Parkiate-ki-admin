@@ -6,6 +6,7 @@ import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/widgets/my_rating_park.dart';
 import 'package:parkline/screens/parking_direction_screen.dart';
 import 'package:parkline/pages/mapa_page_ruta.dart';
+import 'package:parkline/utils/images_features.dart';
 
 import 'package:parkline/models/resenia.dart';
 
@@ -19,9 +20,11 @@ class ParkingPointDetailsScreen extends StatefulWidget {
       mediahora,
       hora,
       dia,
-      mes,
-      detalles,
-      detalles1,
+      mes;
+
+  final List<String> detalles;
+  final int cantidad_detalles;
+  final String detalles1,
       detalles2,
       detalles3,
       detalles4,
@@ -43,7 +46,6 @@ class ParkingPointDetailsScreen extends StatefulWidget {
 
   final double latitude, longitude;
 
-
   final List<Resenia> listaresenias;
 
   ParkingPointDetailsScreen({
@@ -59,6 +61,7 @@ class ParkingPointDetailsScreen extends StatefulWidget {
     this.dia,
     this.mes,
     this.detalles,
+    this.cantidad_detalles,
     this.detalles1,
     this.detalles2,
     this.detalles3,
@@ -158,20 +161,20 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         Icon(
-                                          Icons.bus_alert,
+                                          Icons.access_time,
                                           color: CustomColor.primaryColor,
                                         ),
                                         SizedBox(
                                           width: Dimensions.widthSize,
                                         ),
                                         Text(
-                                          'Q ${widget.hora}.00 por h.',
+                                          'Q ${widget.hora} hr.',
                                           style: TextStyle(color: Colors.black),
                                         ),
                                       ],
                                     ),
                                     SizedBox(
-                                      width: Dimensions.widthSize * 3,
+                                      width: Dimensions.widthSize * 1.5, //3
                                     ),
                                     Row(
                                       crossAxisAlignment:
@@ -196,18 +199,20 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
                             ),
                           ),
                           Expanded(
-                            flex: 1,
-                            child: Image.network(widget.image
-                                //  width: 72,
-                                //  height: 67,
-                                ),
+                            flex: 2, //1
+                            child: Image.network(
+                              widget.image,
+                              width: 72,
+                              height: 67,
+                            ),
                           ),
                         ],
                       ),
                       SizedBox(
                         height: Dimensions.heightSize * 2,
                       ),
-                      serviceWidget(context),
+                      serviceWidgetselection(
+                          context, widget.cantidad_detalles, widget.detalles),
                       SizedBox(
                         height: Dimensions.heightSize * 2,
                       ),
@@ -216,7 +221,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
                   ),
                 ),
               ),
-             /* Positioned(
+              /* Positioned(
                 bottom: Dimensions.heightSize,
                 left: Dimensions.marginSize,
                 right: Dimensions.marginSize,
@@ -285,6 +290,1431 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     );
   }
 
+  serviceWidget1(BuildContext context, List<String> detalles_mostrar) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: 60,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimensions.radius)),
+              color: CustomColor.secondaryColor),
+          child: Image.network(
+              '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+        ),
+        SizedBox(
+          width: Dimensions.widthSize,
+        ),
+      ],
+    );
+  }
+
+  serviceWidget2(BuildContext context, List<String> detalles_mostrar) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: 60,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimensions.radius)),
+              color: CustomColor.secondaryColor),
+          child: Image.network(
+              '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+        ),
+        SizedBox(
+          width: Dimensions.widthSize,
+        ),
+        Container(
+          height: 60,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimensions.radius)),
+              color: CustomColor.secondaryColor),
+          child: Image.network(
+              '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+        ),
+        SizedBox(
+          width: Dimensions.widthSize,
+        ),
+      ],
+    );
+  }
+
+  serviceWidget3(BuildContext context, List<String> detalles_mostrar) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: 60,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimensions.radius)),
+              color: CustomColor.secondaryColor),
+          child: Image.network(
+              '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+        ),
+        SizedBox(
+          width: Dimensions.widthSize,
+        ),
+        Container(
+          height: 60,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimensions.radius)),
+              color: CustomColor.secondaryColor),
+          child: Image.network(
+              '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+        ),
+        SizedBox(
+          width: Dimensions.widthSize,
+        ),
+        Container(
+          height: 60,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimensions.radius)),
+              color: CustomColor.secondaryColor),
+          child: Image.network(
+              '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+        ),
+        SizedBox(
+          width: Dimensions.widthSize,
+        ),
+      ],
+    );
+  }
+
+  serviceWidget4(BuildContext context, List<String> detalles_mostrar) {
+    return Row(
+      children: [
+        Container(
+          height: 60,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimensions.radius)),
+              color: CustomColor.secondaryColor),
+          child: Image.network(
+              '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+        ),
+        SizedBox(
+          width: Dimensions.widthSize,
+        ),
+        Container(
+          height: 60,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimensions.radius)),
+              color: CustomColor.secondaryColor),
+          child: Image.network(
+              '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+        ),
+        SizedBox(
+          width: Dimensions.widthSize,
+        ),
+        Container(
+          height: 60,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimensions.radius)),
+              color: CustomColor.secondaryColor),
+          child: Image.network(
+              '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+        ),
+        SizedBox(
+          width: Dimensions.widthSize,
+        ),
+        Container(
+          height: 60,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimensions.radius)),
+              color: CustomColor.secondaryColor),
+          child: Image.network(
+              '${ImagesFeatures.obtenerlink(detalles_mostrar[3])}'), //          child: Image.asset('${widget.detalles1}'),
+        ),
+        SizedBox(
+          width: Dimensions.widthSize,
+        ),
+      ],
+    );
+  }
+
+  serviceWidget5(BuildContext context, List<String> detalles_mostrar) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[3])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[4])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  serviceWidget6(BuildContext contex, List<String> detalles_mostrar) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[3])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[4])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[5])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  serviceWidget7(BuildContext context, List<String> detalles_mostrar) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[3])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[4])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[5])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[6])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  serviceWidget8(BuildContext context, List<String> detalles_mostrar) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[3])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[4])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[5])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[6])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[7])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  serviceWidget9(BuildContext context, List<String> detalles_mostrar) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[3])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[4])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[5])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[6])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[7])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[8])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  serviceWidget10(BuildContext context, List<String> detalles_mostrar) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[3])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[4])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[5])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[6])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[7])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[8])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[9])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  serviceWidget11(BuildContext context, List<String> detalles_mostrar) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[3])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[4])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[5])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[6])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[7])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[8])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[9])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[10])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  serviceWidget12(BuildContext context, List<String> detalles_mostrar) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[3])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[4])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[5])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[6])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[7])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[8])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[9])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[10])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[11])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  serviceWidget13(BuildContext context, List<String> detalles_mostrar) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[0])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[1])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[2])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[3])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[4])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[5])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[6])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[7])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[8])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[9])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[10])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[11])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: Dimensions.heightSize * 1,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 60,
+              width: 70,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimensions.radius)),
+                  color: CustomColor.secondaryColor),
+              child: Image.network(
+                  '${ImagesFeatures.obtenerlink(detalles_mostrar[12])}'), //          child: Image.asset('${widget.detalles1}'),
+            ),
+            SizedBox(
+              width: Dimensions.widthSize,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   serviceWidget(BuildContext context) {
     return Row(
       children: [
@@ -344,6 +1774,37 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     );
   }
 
+  serviceWidgetselection(BuildContext context, int cantidad_detalles,
+      List<String> detalles_mostrar) {
+    if (cantidad_detalles == 1) {
+      return serviceWidget1(context, detalles_mostrar);
+    } else if (cantidad_detalles == 2) {
+      return serviceWidget2(context, detalles_mostrar);
+    } else if (cantidad_detalles == 3) {
+      return serviceWidget3(context, detalles_mostrar);
+    } else if (cantidad_detalles == 4) {
+      return serviceWidget4(context, detalles_mostrar);
+    } else if (cantidad_detalles == 5) {
+      return serviceWidget5(context, detalles_mostrar);
+    } else if (cantidad_detalles == 6) {
+      return serviceWidget6(context, detalles_mostrar);
+    } else if (cantidad_detalles == 7) {
+      return serviceWidget7(context, detalles_mostrar);
+    } else if (cantidad_detalles == 8) {
+      return serviceWidget8(context, detalles_mostrar);
+    } else if (cantidad_detalles == 9) {
+      return serviceWidget9(context, detalles_mostrar);
+    } else if (cantidad_detalles == 10) {
+      return serviceWidget10(context, detalles_mostrar);
+    } else if (cantidad_detalles == 11) {
+      return serviceWidget11(context, detalles_mostrar);
+    } else if (cantidad_detalles == 12) {
+      return serviceWidget12(context, detalles_mostrar);
+    } else {
+      return serviceWidget13(context, detalles_mostrar);
+    }
+  }
+
   detailsWidget(BuildContext context) {
     return Column(
       children: [
@@ -370,7 +1831,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                  /*  Expanded(
+                    /*  Expanded(
                       flex: 1,
                       child: Text(
                         'Dirección',
@@ -461,7 +1922,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     switch (index) {
       case 0:
         return infoWidget(context);
-     /* case 1:
+      /* case 1:
         return directionWidget(context);*/
       case 1:
         return reviewWidget(context);

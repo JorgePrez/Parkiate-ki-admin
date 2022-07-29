@@ -11,7 +11,9 @@ import 'package:parkline/models/espacios.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/resenia.dart';
 import 'package:parkline/models/parqueo.dart';
+import 'package:parkline/models/visitas_app.dart';
 import 'package:parkline/providers/slots_provider.dart';
+import 'package:parkline/providers/visitas_provider.dart';
 import 'package:parkline/screens/choose_slot_screen.dart';
 import 'package:parkline/screens/choose_slot_screen_test.dart';
 import 'package:parkline/screens/dashboard/scan_qr_screen.dart';
@@ -149,6 +151,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final ReseniasProvider reseniasProvider = new ReseniasProvider();
     final ParqueosProvider parqueosProvider = new ParqueosProvider();
 
+    final VisitasProvider visitasProvider = new VisitasProvider();
+
     //      print(slotsService.slots);
 
     return SafeArea(
@@ -204,6 +208,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   var longlatitud = double.parse(widget.latitude);
                   var longlongitud = double.parse(widget.longitude);
                   var arr = widget.detalles.split(' ');
+                  var arr_length = arr.length;
+
                   var det1;
                   var det2;
                   var det3;
@@ -415,7 +421,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           lunesCierre: widget.lunes_cierres,
                           martesEntrada: widget.martes_apertura,
                           martesSalida: widget.martes_cierre,
-                          detalles: widget.detalles,
+                          detalles: arr,
+                          cantidad_detalles: arr.length,
                           detalles1: det1,
                           detalles2: det2,
                           detalles3: det3,
@@ -544,11 +551,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               ListTile(
                 title: Text(
-                  'Historial de visitas de usuarios desde app móvil',
+                  'Historial de visitas recientes de usuarios desde app móvil',
                   style: CustomStyle.listStyle,
                 ),
                 trailing: Icon(Icons.history_outlined),
                 onTap: () async {
+                  List<Visitasapp> lista =
+                      await visitasProvider.getbypark((widget.id_parqueo));
+
+                  print(lista);
+
+                  /*
                   List<Serviciotrue> lista = await serviciosProvider
                       .parkhistorytrue(widget.id_parqueo);
 
@@ -558,14 +571,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
                           ParkingHistoryScreen(listaservicios: lista)));
+                          */
                 },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: Dimensions.marginSize, right: Dimensions.marginSize),
-                child: Divider(
-                  color: Colors.black.withOpacity(0.4),
-                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
