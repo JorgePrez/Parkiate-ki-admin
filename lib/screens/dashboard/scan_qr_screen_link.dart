@@ -71,50 +71,26 @@ class _ScanPageState extends State<ScanPage> {
                 if ((preqrCodeResult == null) || (preqrCodeResult == "")) {
                   tipodepeticion = 2;
                 } else {
-                  final splitted = preqrCodeResult.split(':');
-
-                  final String codigo = splitted[0];
-
-                  final String id = splitted[1];
-
-                  if (codigo.length == 3) {
-                    Servicioadmin servicioadmin = new Servicioadmin(
-                      idServicio: id,
-                      idParqueo: 'N/A',
-                      direccion: 'N/A',
-                      nombreParqueo: 'N/A',
-                      imagenes: 'N/A',
-                      idUsuario: 'N/A',
-                      nombreUsuario: 'N/A',
-                      telefono: 'N/A',
-                      modeloAuto: 'N/A',
-                      placaAuto: 'N/A',
-                      fecha: 'N/A',
-                      horaDeentrada: 'N/A',
-                      horaDesalida: 'N/A',
-                      precio: 'N/A',
-                      parqueoControlPagos: 'N/A',
-                    );
-
-                    ResponseApi responseApi =
-                        await serviciosProvider.create(servicioadmin);
-
-                    print('RESPUESTA: ${responseApi.toJson()}');
-
-                    if (responseApi.success) {
-                      tipodepeticion = 0;
-                      //  NotificationsService.showSnackbar(responseApi.message);
+                  if (preqrCodeResult.length > 50) {
+                    tipodepeticion == 1;
+                    if (await canLaunch(preqrCodeResult)) {
+                      await launch(preqrCodeResult);
                     } else {
-                      NotificationsService.showSnackbar(responseApi.message);
+                      throw 'No se puede leer el link: $preqrCodeResult';
                     }
                   } else {
                     // Obtener el servicio que ya esta registrado
+                    /*   final splitted = preqrCodeResult.split(':');
+
+                    final String codigo = splitted[0];
+
+                    final String id = splitted[1];*/
 
                     ResponseApi responseApi2 =
-                        await serviciosProvider.getById(id);
+                        await serviciosProvider.getByIdtrue(preqrCodeResult);
 
-                    Servicioadmin serviciorecuperado =
-                        Servicioadmin.fromJson(responseApi2.data);
+                    Serviciotrue serviciorecuperado =
+                        Serviciotrue.fromJson(responseApi2.data);
 
                     ResponseApi responseApitafias = await parqueosProvider
                         .getprize(serviciorecuperado.idParqueo);
@@ -135,6 +111,8 @@ class _ScanPageState extends State<ScanPage> {
                     String diferenciaString = diferenciafake.toString();
                     String diferenciaString2 =
                         diferenciaString.substring(0, 4); // 'art'
+
+                    //TODO: ERROR SI PASA DE 10 HORAS: 10.5
 
                     String horas = diferenciaString2.substring(0, 1);
                     String minutos = diferenciaString2.substring(2);
@@ -169,8 +147,8 @@ class _ScanPageState extends State<ScanPage> {
 
                     //Actaulizar la hora de salida y el precio a cobrar
 
-                    ResponseApi responseApi5 =
-                        await serviciosProvider.update(id, currentTime, precio);
+                    ResponseApi responseApi5 = await serviciosProvider
+                        .updatetrue(preqrCodeResult, currentTime, precio);
 
                     if (responseApi5.success) {
                       tipodepeticion = 1;
@@ -189,7 +167,7 @@ class _ScanPageState extends State<ScanPage> {
                   } else if (tipodepeticion == 1) {
                     mensaje = fin;
                   } else {
-                    mensaje = "Error al escanear QR";
+                    mensaje = "QR";
                   }
 
                   //PETICCION HHTTP

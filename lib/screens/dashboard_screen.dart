@@ -22,6 +22,8 @@ import 'package:parkline/utils/colors.dart';
 import 'package:parkline/utils/vehichle.dart';
 import 'package:parkline/screens/parking_point_details_screen.dart';
 import 'package:parkline/screens/dashboard/parking_history_screen.dart';
+import 'package:parkline/screens/dashboard/parking_history_screen2.dart';
+
 import 'package:parkline/screens/dashboard/add_vehicle_screen.dart';
 import 'package:parkline/screens/dashboard/my_account_screen.dart';
 import 'package:parkline/utils/shared_pref.dart';
@@ -556,6 +558,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
                           ParkingHistoryScreen(listaservicios: lista)));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'Servicios Actuales',
+                  style: CustomStyle.listStyle,
+                ),
+                trailing: Icon(Icons.airport_shuttle_outlined),
+                onTap: () async {
+                  List<Servicioadminimagen> lista = await serviciosProvider
+                      .parkhistoryactuales(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen2(listaservicios: lista)));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'Historial de Servicios',
+                  style: CustomStyle.listStyle,
+                ),
+                trailing: Icon(Icons.history_edu_outlined),
+                onTap: () async {
+                  List<Servicioadminimagen> lista =
+                      await serviciosProvider.parkhistory(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen2(listaservicios: lista)));
                 },
               ),
               Padding(
