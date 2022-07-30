@@ -394,6 +394,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
 
   serviceWidget4(BuildContext context, List<String> detalles_mostrar) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           height: 60,
@@ -455,6 +456,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -539,6 +541,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -636,6 +639,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -746,6 +750,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -805,6 +810,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
           height: Dimensions.heightSize * 1,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -868,6 +874,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -927,6 +934,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
           height: Dimensions.heightSize * 1,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -1011,6 +1019,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -1070,6 +1079,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
           height: Dimensions.heightSize * 1,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -1167,6 +1177,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -1226,6 +1237,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
           height: Dimensions.heightSize * 1,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -1336,6 +1348,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -1395,6 +1408,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
           height: Dimensions.heightSize * 1,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -1454,6 +1468,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
           height: Dimensions.heightSize * 1,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -1517,6 +1532,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -1576,6 +1592,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
           height: Dimensions.heightSize * 1,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,
@@ -1635,6 +1652,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
           height: Dimensions.heightSize * 1,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 60,

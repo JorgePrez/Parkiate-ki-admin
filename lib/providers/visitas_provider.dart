@@ -24,16 +24,17 @@ class VisitasProvider {
     try {
       Uri url =
           Uri.http(_url, '$_api/getbypark.php?id_parqueo_app=$id_parqueo');
-      Map<String, String> headers = {
-        'Content-type': 'application/json',
-        'ngrok-skip-browser-warning': '40'
-      };
+      Map<String, String> headers = {'Content-type': 'application/json'};
 
       final res = await http.get(url, headers: headers);
 
       final data = json.decode(res.body);
-      Visitasapp user = Visitasapp.fromJsonList(data);
-      return user.toList;
+      // Visitasapp user = Visitasapp.fromJsonList(data);
+      print(data);
+
+      return data;
+      //  return user.toList;
+
     } catch (e) {
       print('Error: $e');
       return null;
