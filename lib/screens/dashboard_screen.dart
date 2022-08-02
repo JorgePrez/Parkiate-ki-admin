@@ -11,11 +11,13 @@ import 'package:parkline/models/espacios.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/resenia.dart';
 import 'package:parkline/models/parqueo.dart';
+import 'package:parkline/models/visita.dart';
 import 'package:parkline/models/visitas_app.dart';
 import 'package:parkline/providers/slots_provider.dart';
 import 'package:parkline/providers/visitas_provider.dart';
 import 'package:parkline/screens/choose_slot_screen.dart';
 import 'package:parkline/screens/choose_slot_screen_test.dart';
+import 'package:parkline/screens/dashboard/parking_history_screen_full.dart';
 import 'package:parkline/screens/dashboard/scan_qr_screen.dart';
 import 'package:parkline/screens/estado_parqueo.dart';
 import 'package:parkline/utils/dimensions.dart';
@@ -46,6 +48,15 @@ String vehiculo = 'assets/images/vehicle/tourism.png';
 String moto = 'assets/images/vehicle/motorbike2.png';
 String camion = 'assets/images/vehicle/truck.png';
 String bus = 'assets/images/vehicle/bus.png';
+
+Color _colorContainer1 = Colors.white;
+Color _colorContainer2 = Colors.white;
+Color _colorContainer3 = Colors.white;
+Color _colorContainer4 = Colors.white;
+Color _colorContainer5 = Colors.white;
+Color _colorContainer6 = Colors.white;
+Color _colorContainer7 = Colors.white;
+Color _colorContainer8 = Colors.white;
 
 class DashboardScreen extends StatefulWidget {
   final String id_parqueo,
@@ -372,22 +383,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 trailing: Icon(Icons.history_outlined),
                 onTap: () async {
-                  List<Visitasapp> lista =
-                      await visitasProvider.getbypark((widget.id_parqueo));
-
-                  print(lista);
-
-                  /*
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytrue(widget.id_parqueo);
-
-                  print(lista);
+                  List<Visita> lista_visitas =
+                      await visitasProvider.getbypark(widget.id_parqueo);
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                          */
+                      builder: (context) => ParkingHistoryScreenFull(
+                          listaservicios: lista_visitas)));
                 },
               ),
               Padding(
@@ -473,49 +475,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
         ),
-        body: ListView.builder(
-          itemCount: options.length + 2,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return SizedBox(height: 15.0);
-            } else if (index == options.length + 1) {
-              return SizedBox(height: 100.0);
-            }
-            return Container(
+        body: ListView(
+          children: [
+            Container(
               alignment: Alignment.center,
               margin: EdgeInsets.all(10.0),
               width: double.infinity,
               height: 80.0,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                border: _selectedOption == index - 1
-                    ? Border.all(color: Colors.black26)
-                    : null,
-              ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black26)),
               child: ListTile(
-                leading: options[index - 1].icon,
+                leading: Icon(Icons.local_parking_outlined, size: 40.0),
                 title: Text(
-                  options[index - 1].title,
+                  'Mí Parqueo',
                   style: TextStyle(
-                    color: _selectedOption == index - 1
-                        ? Colors.black
-                        : Colors.grey[600],
+                    color: Colors.black,
                   ),
                 ),
                 subtitle: Text(
-                  options[index - 1].subtitle,
-                  style: TextStyle(
-                    color: _selectedOption == index - 1
-                        ? Colors.black
-                        : Colors.grey,
-                  ),
+                  'Aquí podrás ver la información que has registrado sobre tu parqueo',
+                  style: TextStyle(color: Colors.black),
                 ),
-                selected: _selectedOption == index - 1,
+                selected: true,
                 onTap: () async {
                   setState(() {
-                    _selectedOption = index - 1;
+                    _colorContainer1 = _colorContainer1 == Color(0xEEEEE4)
+                        ? Colors.white
+                        : Color(0xEEEEE4);
+                    ;
                   });
+                  /*setState(() {
+                    _selectedOption = index - 1;
+                  });*/
                   /*
                   List<Serviciotrue> lista = await serviciosProvider
                       .parkhistorytruesorry(widget.id_parqueo);
@@ -529,8 +522,384 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           */
                 },
               ),
-            );
-          },
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: 80.0,
+              decoration: BoxDecoration(
+                  color: _colorContainer1,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black26)),
+              child: ListTile(
+                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                title: Text(
+                  'Autos que visitan tu parqueo',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                subtitle: Text(
+                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
+                  style: TextStyle(color: Colors.black),
+                ),
+                selected: true,
+                onTap: () async {
+                  setState(() {
+                    _colorContainer2 = _colorContainer2 == Color(0xEEEEE4)
+                        ? Colors.white
+                        : Color(0xEEEEE4);
+                    ;
+                  });
+
+                  /*setState(() {
+                    _selectedOption = index - 1;
+                  });*/
+                  /*
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                          */
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: 80.0,
+              decoration: BoxDecoration(
+                  color: _colorContainer1,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black26)),
+              child: ListTile(
+                leading: Icon(Icons.grid_view_outlined, size: 40.0),
+                title: Text(
+                  'Espacios (libres y ocupados)',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                subtitle: Text(
+                  'Aquí podrás ver que espacios estan libres y los espacios ocupados (junto con el auto que ocupa cada espacio) ',
+                  style: TextStyle(color: Colors.black),
+                ),
+                selected: true,
+                onTap: () async {
+                  setState(() {
+                    _colorContainer3 = _colorContainer3 == Color(0xEEEEE4)
+                        ? Colors.white
+                        : Color(0xEEEEE4);
+                    ;
+                  });
+
+                  /*setState(() {
+                    _selectedOption = index - 1;
+                  });*/
+                  /*
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                          */
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: 80.0,
+              decoration: BoxDecoration(
+                  color: _colorContainer1,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black26)),
+              child: ListTile(
+                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                title: Text(
+                  'Autos que visitan tu parqueo',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                subtitle: Text(
+                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
+                  style: TextStyle(color: Colors.black),
+                ),
+                selected: true,
+                onTap: () async {
+                  setState(() {
+                    _colorContainer4 = _colorContainer4 == Color(0xEEEEE4)
+                        ? Colors.white
+                        : Color(0xEEEEE4);
+                    ;
+                  });
+
+                  /*setState(() {
+                    _selectedOption = index - 1;
+                  });*/
+                  /*
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                          */
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: 80.0,
+              decoration: BoxDecoration(
+                  color: _colorContainer1,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black26)),
+              child: ListTile(
+                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                title: Text(
+                  'Autos que visitan tu parqueo',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                subtitle: Text(
+                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
+                  style: TextStyle(color: Colors.black),
+                ),
+                selected: true,
+                onTap: () async {
+                  setState(() {
+                    _colorContainer5 = _colorContainer5 == Color(0xEEEEE4)
+                        ? Colors.white
+                        : Color(0xEEEEE4);
+                    ;
+                  });
+
+                  /*setState(() {
+                    _selectedOption = index - 1;
+                  });*/
+                  /*
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                          */
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: 80.0,
+              decoration: BoxDecoration(
+                  color: _colorContainer1,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black26)),
+              child: ListTile(
+                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                title: Text(
+                  'Autos que visitan tu parqueo',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                subtitle: Text(
+                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
+                  style: TextStyle(color: Colors.black),
+                ),
+                selected: true,
+                onTap: () async {
+                  setState(() {
+                    _colorContainer6 = _colorContainer6 == Color(0xEEEEE4)
+                        ? Colors.white
+                        : Color(0xEEEEE4);
+                    ;
+                  });
+
+                  /*setState(() {
+                    _selectedOption = index - 1;
+                  });*/
+                  /*
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                          */
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: 80.0,
+              decoration: BoxDecoration(
+                  color: _colorContainer1,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black26)),
+              child: ListTile(
+                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                title: Text(
+                  'Autos que visitan tu parqueo',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                subtitle: Text(
+                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
+                  style: TextStyle(color: Colors.black),
+                ),
+                selected: true,
+                onTap: () async {
+                  setState(() {
+                    _colorContainer7 = _colorContainer7 == Color(0xEEEEE4)
+                        ? Colors.white
+                        : Color(0xEEEEE4);
+                    ;
+                  });
+
+                  /*setState(() {
+                    _selectedOption = index - 1;
+                  });*/
+                  /*
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                          */
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: 80.0,
+              decoration: BoxDecoration(
+                  color: _colorContainer1,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black26)),
+              child: ListTile(
+                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                title: Text(
+                  'Autos que visitan tu parqueo',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                subtitle: Text(
+                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
+                  style: TextStyle(color: Colors.black),
+                ),
+                selected: true,
+                onTap: () async {
+                  setState(() {
+                    _colorContainer8 = _colorContainer8 == Color(0xEEEEE4)
+                        ? Colors.white
+                        : Color(0xEEEEE4);
+                    ;
+                  });
+
+                  /*setState(() {
+                    _selectedOption = index - 1;
+                  });*/
+                  /*
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                          */
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: 80.0,
+              decoration: BoxDecoration(
+                  color: _colorContainer1,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black26)),
+              child: ListTile(
+                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                title: Text(
+                  'Autos que visitan tu parqueo',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                subtitle: Text(
+                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
+                  style: TextStyle(color: Colors.black),
+                ),
+                selected: true,
+                onTap: () async {
+                  setState(() {
+                    _colorContainer1 = _colorContainer1 == Color(0x8C8C8C)
+                        ? Colors.white
+                        : Color(0x8C8C8C);
+                    ;
+                  });
+
+                  /*setState(() {
+                    _selectedOption = index - 1;
+                  });*/
+                  /*
+                  List<Serviciotrue> lista = await serviciosProvider
+                      .parkhistorytruesorry(widget.id_parqueo);
+
+                  print(lista);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingHistoryScreen(listaservicios: lista)));
+                          */
+                },
+              ),
+            ),
+          ],
         ),
 
         /*  body: Container(
