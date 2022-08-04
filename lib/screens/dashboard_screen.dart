@@ -18,6 +18,7 @@ import 'package:parkline/providers/visitas_provider.dart';
 import 'package:parkline/screens/choose_slot_screen.dart';
 import 'package:parkline/screens/choose_slot_screen_test.dart';
 import 'package:parkline/screens/dashboard/parking_history_screen_full.dart';
+import 'package:parkline/screens/dashboard/scan_qr_launcher.dart';
 import 'package:parkline/screens/dashboard/scan_qr_screen.dart';
 import 'package:parkline/screens/estado_parqueo.dart';
 import 'package:parkline/utils/dimensions.dart';
@@ -323,6 +324,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       builder: (context) => EstadoParqueo(
                             id_parqueo_firebase: widget.id_parqueo_firebase,
                           )));*/
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'Escanear QR de Clientes ( usuarios que han descargado la app móvil)',
+                  style: CustomStyle.listStyle,
+                ),
+                trailing: Icon(Icons.qr_code_2_outlined),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ScanPageLauncher()));
                 },
               ),
               Padding(
