@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:parkline/models/visita.dart';
 import 'package:parkline/screens/parking_code_screen_details.dart';
+import 'package:parkline/screens/parking_code_screen_details2.dart';
 import 'package:parkline/screens/parking_code_screen_qr2.dart';
 
 import 'package:parkline/utils/dimensions.dart';
@@ -9,17 +10,16 @@ import 'package:parkline/utils/custom_style.dart';
 import 'package:parkline/utils/colors.dart';
 import 'package:parkline/models/servicioadmin.dart';
 
-class ParkingHistoryScreenFull extends StatefulWidget {
+class ParkingCurrentlist extends StatefulWidget {
   final List<Visita> listaservicios;
 
-  ParkingHistoryScreenFull({Key key, this.listaservicios}) : super(key: key);
+  ParkingCurrentlist({Key key, this.listaservicios}) : super(key: key);
 
   @override
-  _ParkingHistoryScreenFullState createState() =>
-      _ParkingHistoryScreenFullState();
+  _ParkingCurrentListState createState() => _ParkingCurrentListState();
 }
 
-class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
+class _ParkingCurrentListState extends State<ParkingCurrentlist> {
   @override
   Widget build(BuildContext context) {
     bool valor = false;
@@ -56,7 +56,7 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                       left: Dimensions.marginSize,
                       right: Dimensions.marginSize),
                   child: Text(
-                    'Registro de visitas (finalizadas) de los usuarios que utilizan la app móvil',
+                    'Usuarios dentro de tu parqueo (registrados con QR de app móvil)',
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: Dimensions.largeTextSize),
@@ -74,7 +74,7 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                         Visita parkingHistory = widget.listaservicios[index];
 
                         String temporal_fecha =
-                            parkingHistory.timestampSalida.substring(1, 11);
+                            parkingHistory.timestampEntrada.substring(1, 11);
 
                         List<String> temporal_fecha_slipt =
                             temporal_fecha.split('-');
@@ -171,62 +171,6 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                                                   Dimensions.heightSize * 0.3),
                                           ElevatedButton.icon(
                                             onPressed: () {
-                                              //formato de hora  08:00-27/06/2022
-
-                                              //tiempo_total: 00-00-56-41
-
-                                              /*    List<String> hora_temporal =
-                                                  parkingHistory.tiempoTotal
-                                                      .split('-');*/
-
-                                              List<String> hora_temporal =
-                                                  parkingHistory.tiempoTotal
-                                                      .split('-');
-
-                                              String dia_t = hora_temporal[0];
-                                              String hora_t = hora_temporal[1];
-                                              String minuto_t =
-                                                  hora_temporal[2];
-
-                                              if (int.parse(dia_t) > 0) {
-                                                dia_t = (int.parse(dia_t))
-                                                    .toString();
-
-                                                if (int.parse(dia_t) == 1) {
-                                                  dia_t = '${dia_t} dìa';
-                                                } else {
-                                                  dia_t = '${dia_t} dìas';
-                                                }
-                                              } else {
-                                                dia_t = '';
-                                              }
-
-                                              if (int.parse(hora_t) > 0) {
-                                                hora_t = (int.parse(hora_t))
-                                                    .toString();
-
-                                                if (int.parse(hora_t) == 1) {
-                                                  hora_t = '${hora_t} hora';
-                                                } else {
-                                                  hora_t = '${hora_t} horas';
-                                                }
-                                              } else {
-                                                hora_t = '';
-                                              }
-
-                                              if (int.parse(minuto_t) > 0) {
-                                                minuto_t = (int.parse(minuto_t))
-                                                    .toString();
-
-                                                minuto_t =
-                                                    '${minuto_t} minutos';
-                                              } else {
-                                                minuto_t = '${1} minuto';
-                                              }
-
-                                              String tiempo_total =
-                                                  '${dia_t} ${hora_t} ${minuto_t}';
-
                                               String temporal_fecha_E =
                                                   parkingHistory
                                                       .timestampEntrada
@@ -256,52 +200,19 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                                               String entrada =
                                                   '${hora_E} - $fecha_E';
 
-                                              String temporal_fecha_S =
-                                                  parkingHistory.timestampSalida
-                                                      .substring(1, 11);
-                                              String temporal_hora_S =
-                                                  parkingHistory.timestampSalida
-                                                      .substring(11);
-
-                                              String hora_S = temporal_hora_S
-                                                  .substring(0, 5);
-
-                                              List<String>
-                                                  temporal_fechaS_slipt =
-                                                  temporal_fecha_S.split('-');
-
-                                              String dia_s =
-                                                  temporal_fechaS_slipt[2]
-                                                      .trim();
-                                              String mes_s =
-                                                  temporal_fechaS_slipt[1];
-                                              String anio_s =
-                                                  temporal_fechaS_slipt[0];
-
-                                              String fecha_S =
-                                                  '${dia_s}/${mes_s}/${anio_s}';
-
-                                              String salida =
-                                                  '${hora_S} - $fecha_S';
-                                              //tiempo total
-
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          ParkingCodeScreenDetails(
+                                                          ParkingCodeScreenDetails2(
                                                             img_auto:
                                                                 parkingHistory
                                                                     .imgAuto,
                                                             numero_placa:
                                                                 parkingHistory
                                                                     .numeroPlaca,
-                                                            tiempo_total:
-                                                                tiempo_total,
                                                             timestamp_entrada:
                                                                 entrada,
-                                                            timestamp_salida:
-                                                                salida,
                                                             email:
                                                                 parkingHistory
                                                                     .email,

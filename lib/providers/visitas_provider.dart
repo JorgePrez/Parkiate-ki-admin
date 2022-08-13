@@ -63,4 +63,27 @@ class VisitasProvider {
       return [];
     }
   }
+
+  Future<List<Visita>> getcurrents(String id_parqueo) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/parkactuales');
+
+      String bodyParams = json.encode({
+        'id_parqueo': id_parqueo,
+      });
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      print(data);
+
+      Visita visita = Visita.fromJsonList(data);
+      print(visita.toList);
+      return visita.toList;
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
 }

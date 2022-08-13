@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //import 'package:parkline/data/slot.dart';
 import 'package:parkline/models/slots.dart';
 
@@ -17,6 +18,7 @@ import 'package:parkline/providers/slots_provider.dart';
 import 'package:parkline/providers/visitas_provider.dart';
 import 'package:parkline/screens/choose_slot_screen.dart';
 import 'package:parkline/screens/choose_slot_screen_test.dart';
+import 'package:parkline/screens/dashboard/parking_currentlist.dart';
 import 'package:parkline/screens/dashboard/parking_history_screen_full.dart';
 import 'package:parkline/screens/dashboard/scan_qr_launcher.dart';
 import 'package:parkline/screens/dashboard/scan_qr_screen.dart';
@@ -280,6 +282,71 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               ListTile(
                 title: Text(
+                  'Visitas Actuales',
+                  style: CustomStyle.listStyle,
+                ),
+                trailing: Icon(FontAwesomeIcons.carAlt),
+                onTap: () async {
+                  List<Visita> lista_visitas =
+                      await visitasProvider.getcurrents(widget.id_parqueo);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ParkingCurrentlist(listaservicios: lista_visitas)));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'Historial de visitas desde app',
+                  style: CustomStyle.listStyle,
+                ),
+                trailing: Icon(Icons.history),
+                onTap: () async {
+                  List<Visita> lista_visitas =
+                      await visitasProvider.getbypark(widget.id_parqueo);
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ParkingHistoryScreenFull(
+                          listaservicios: lista_visitas)));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'Escanear QR de Clientes ( usuarios que han descargado la app móvil)',
+                  style: CustomStyle.listStyle,
+                ),
+                trailing: Icon(Icons.qr_code_2_outlined),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ScanPageLauncher()));
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize, right: Dimensions.marginSize),
+                child: Divider(
+                  color: Colors.black.withOpacity(0.4),
+                ),
+              ),
+              ListTile(
+                title: Text(
                   'Entradas y Salidas Por Placa',
                   style: CustomStyle.listStyle,
                 ),
@@ -324,44 +391,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       builder: (context) => EstadoParqueo(
                             id_parqueo_firebase: widget.id_parqueo_firebase,
                           )));*/
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: Dimensions.marginSize, right: Dimensions.marginSize),
-                child: Divider(
-                  color: Colors.black.withOpacity(0.4),
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  'Escanear QR de Clientes ( usuarios que han descargado la app móvil)',
-                  style: CustomStyle.listStyle,
-                ),
-                trailing: Icon(Icons.qr_code_2_outlined),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ScanPageLauncher()));
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: Dimensions.marginSize, right: Dimensions.marginSize),
-                child: Divider(
-                  color: Colors.black.withOpacity(0.4),
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  'Escanear QR de Clientes ( usuarios que han descargado la app móvil)',
-                  style: CustomStyle.listStyle,
-                ),
-                trailing: Icon(Icons.qr_code_2_outlined),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ScanPage()));
                 },
               ),
               Padding(
@@ -503,7 +532,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: double.infinity,
               height: 80.0,
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: _colorContainer1, // Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(color: Colors.black26)),
               child: ListTile(
@@ -526,20 +555,59 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         : Color(0xEEEEE4);
                     ;
                   });
-                  /*setState(() {
-                    _selectedOption = index - 1;
-                  });*/
-                  /*
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
 
-                  print(lista);
+                  var longlatitud = double.parse(widget.latitude);
+                  var longlongitud = double.parse(widget.longitude);
+                  var arr = widget.detalles.split(' ');
+                  var arr_length = arr.length;
 
-                  Navigator.of(context).pop();
+                  var det1 = '';
+                  var det2 = '';
+                  var det3 = '';
+                  var det4 = '';
+
+                  List<Resenia> listar =
+                      await reseniasProvider.reviewsbyPark2(widget.id_parqueo);
+
+                  // print(listar);
+
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                          */
+                      builder: (context) => ParkingPointDetailsScreen(
+                          idpark: widget.id_parqueo,
+                          name: widget
+                              .nombre_empresa, //        name: parkingPoint.name,
+                          amount: widget.capacidad_maxima,
+                          image: widget.imagenes,
+                          address: widget.direccion,
+                          slots: widget.capacidad_maxima,
+                          mediahora: widget.media_hora,
+                          hora: widget.hora,
+                          dia: widget.dia,
+                          mes: widget.mes,
+                          lunesEntrada: widget.lunes_apertura,
+                          lunesCierre: widget.lunes_cierres,
+                          martesEntrada: widget.martes_apertura,
+                          martesSalida: widget.martes_cierre,
+                          detalles: arr,
+                          cantidad_detalles: arr.length,
+                          detalles1: det1,
+                          detalles2: det2,
+                          detalles3: det3,
+                          detalles4: det4,
+                          latitude: longlatitud,
+                          longitude: longlongitud,
+                          miercolesEntrada: widget.miercoles_apertura,
+                          miercolesSalida: widget.miercoles_cierre,
+                          juevesEntrada: widget.jueves_apertura,
+                          juevesSalida: widget.jueves_cierre,
+                          viernesEntrada: widget.viernes_apertura,
+                          viernesSalida: widget.viernes_cierre,
+                          sabadoEntrada: widget.sabado_apertura,
+                          sabadoSalida: widget.sabado_cierre,
+                          domingoEntrada: widget.domingo_apertura,
+                          domingoSalida: widget.domingo_cierre,
+                          controlPagos: widget.control_pagos,
+                          listaresenias: listar)));
                 },
               ),
             ),
@@ -549,19 +617,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: double.infinity,
               height: 80.0,
               decoration: BoxDecoration(
-                  color: _colorContainer1,
+                  color: _colorContainer2,
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(color: Colors.black26)),
               child: ListTile(
-                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                leading: Icon(FontAwesomeIcons.carAlt, size: 40.0),
                 title: Text(
-                  'Autos que visitan tu parqueo',
+                  'Visitas Actuales',
                   style: TextStyle(
                     color: Colors.black,
                   ),
                 ),
                 subtitle: Text(
-                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
+                  'Usuarios de la app móvil que estan dentro de tu parqueo',
                   style: TextStyle(color: Colors.black),
                 ),
                 selected: true,
@@ -573,20 +641,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ;
                   });
 
-                  /*setState(() {
-                    _selectedOption = index - 1;
-                  });*/
-                  /*
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
-
-                  print(lista);
+                  List<Visita> lista_visitas =
+                      await visitasProvider.getcurrents(widget.id_parqueo);
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                          */
+                          ParkingCurrentlist(listaservicios: lista_visitas)));
                 },
               ),
             ),
@@ -596,19 +657,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: double.infinity,
               height: 80.0,
               decoration: BoxDecoration(
-                  color: _colorContainer1,
+                  color: _colorContainer3,
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(color: Colors.black26)),
               child: ListTile(
-                leading: Icon(Icons.grid_view_outlined, size: 40.0),
+                leading: Icon(Icons.history, size: 40.0),
                 title: Text(
-                  'Espacios (libres y ocupados)',
+                  'Historial de visitas desde app',
                   style: TextStyle(
                     color: Colors.black,
                   ),
                 ),
                 subtitle: Text(
-                  'Aquí podrás ver que espacios estan libres y los espacios ocupados (junto con el auto que ocupa cada espacio) ',
+                  'Registro de las visitas(finalizadas) de los usuarios que usan la aplicación ',
                   style: TextStyle(color: Colors.black),
                 ),
                 selected: true,
@@ -620,20 +681,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ;
                   });
 
-                  /*setState(() {
-                    _selectedOption = index - 1;
-                  });*/
-                  /*
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
-
-                  print(lista);
+                  List<Visita> lista_visitas =
+                      await visitasProvider.getbypark(widget.id_parqueo);
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                          */
+                      builder: (context) => ParkingHistoryScreenFull(
+                          listaservicios: lista_visitas)));
                 },
               ),
             ),
@@ -643,19 +697,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: double.infinity,
               height: 80.0,
               decoration: BoxDecoration(
-                  color: _colorContainer1,
+                  color: _colorContainer4,
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(color: Colors.black26)),
               child: ListTile(
-                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                leading: Icon(Icons.qr_code_2_sharp, size: 40.0),
                 title: Text(
-                  'Autos que visitan tu parqueo',
+                  'Escanear QR de usuarios',
                   style: TextStyle(
                     color: Colors.black,
                   ),
                 ),
                 subtitle: Text(
-                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
+                  'Escanea el QR de los usuarios para registrar que visitaron tu parqueo',
                   style: TextStyle(color: Colors.black),
                 ),
                 selected: true,
@@ -667,6 +721,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ;
                   });
 
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ScanPageLauncher()));
+
                   /*setState(() {
                     _selectedOption = index - 1;
                   });*/
@@ -690,19 +748,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: double.infinity,
               height: 80.0,
               decoration: BoxDecoration(
-                  color: _colorContainer1,
+                  color: _colorContainer5,
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(color: Colors.black26)),
               child: ListTile(
-                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                leading: Icon(FontAwesomeIcons.square, size: 40.0),
                 title: Text(
-                  'Autos que visitan tu parqueo',
+                  'Espacios Libres/Ocupados',
                   style: TextStyle(
                     color: Colors.black,
                   ),
                 ),
                 subtitle: Text(
-                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
+                  'Aquí podrás ver cuales espacios estan libres u ocupados y los autos que encuentran en ellos',
                   style: TextStyle(color: Colors.black),
                 ),
                 selected: true,
@@ -737,13 +795,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: double.infinity,
               height: 80.0,
               decoration: BoxDecoration(
-                  color: _colorContainer1,
+                  color: _colorContainer6,
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(color: Colors.black26)),
               child: ListTile(
-                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
+                leading: Icon(FontAwesomeIcons.video, size: 35.0), //40
                 title: Text(
-                  'Autos que visitan tu parqueo',
+                  'Pestaña Opcional',
                   style: TextStyle(
                     color: Colors.black,
                   ),
@@ -778,233 +836,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 },
               ),
             ),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.all(10.0),
-              width: double.infinity,
-              height: 80.0,
-              decoration: BoxDecoration(
-                  color: _colorContainer1,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.black26)),
-              child: ListTile(
-                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
-                title: Text(
-                  'Autos que visitan tu parqueo',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                subtitle: Text(
-                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
-                  style: TextStyle(color: Colors.black),
-                ),
-                selected: true,
-                onTap: () async {
-                  setState(() {
-                    _colorContainer7 = _colorContainer7 == Color(0xEEEEE4)
-                        ? Colors.white
-                        : Color(0xEEEEE4);
-                    ;
-                  });
-
-                  /*setState(() {
-                    _selectedOption = index - 1;
-                  });*/
-                  /*
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
-
-                  print(lista);
-
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                          */
-                },
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.all(10.0),
-              width: double.infinity,
-              height: 80.0,
-              decoration: BoxDecoration(
-                  color: _colorContainer1,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.black26)),
-              child: ListTile(
-                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
-                title: Text(
-                  'Autos que visitan tu parqueo',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                subtitle: Text(
-                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
-                  style: TextStyle(color: Colors.black),
-                ),
-                selected: true,
-                onTap: () async {
-                  setState(() {
-                    _colorContainer8 = _colorContainer8 == Color(0xEEEEE4)
-                        ? Colors.white
-                        : Color(0xEEEEE4);
-                    ;
-                  });
-
-                  /*setState(() {
-                    _selectedOption = index - 1;
-                  });*/
-                  /*
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
-
-                  print(lista);
-
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                          */
-                },
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.all(10.0),
-              width: double.infinity,
-              height: 80.0,
-              decoration: BoxDecoration(
-                  color: _colorContainer1,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.black26)),
-              child: ListTile(
-                leading: Icon(Icons.drive_eta_rounded, size: 40.0),
-                title: Text(
-                  'Autos que visitan tu parqueo',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                subtitle: Text(
-                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
-                  style: TextStyle(color: Colors.black),
-                ),
-                selected: true,
-                onTap: () async {
-                  setState(() {
-                    _colorContainer1 = _colorContainer1 == Color(0x8C8C8C)
-                        ? Colors.white
-                        : Color(0x8C8C8C);
-                    ;
-                  });
-
-                  /*setState(() {
-                    _selectedOption = index - 1;
-                  });*/
-                  /*
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
-
-                  print(lista);
-
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                          */
-                },
-              ),
-            ),
           ],
         ),
-
-        /*  body: Container(
-            /*  child: MaterialApp(
-       
-      // Scaffold Widget
-     home: Scaffold(
-   
-        body: Center(
-          child: Text('Dashboard de administrador'),
-        ),
-      )
-    ),*/
-
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Stack(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: Center(
-                    child: Text('Dashboard de administrador'),
-                  ),
-                ),
-
-                /*
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: MapMarkers(
-                      idusuario: widget.id,
-                      nombreusuario: widget.nombre,
-                      telefono: widget.telefono,
-                      modelo_auto: widget.modelo_auto,
-                      placa_auto: widget.placa_auto,
-                      imagen_usuario: widget.imagen),
-                ),*/
-                /* DraggableScrollableSheet(
-                  builder: (context, scrollController) {
-                    return Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(Dimensions.radius * 3),
-                              topRight:
-                                  Radius.circular(Dimensions.radius * 5))),
-                      child: SingleChildScrollView(
-                        child: isConfirm
-                            ? bodyWidget(context)
-                            : parkingPointWidget(context),
-                        controller: scrollController,
-                      ),
-                    );
-                  },
-                  initialChildSize: 0.40,
-                  minChildSize: 0.40,
-                  maxChildSize: 1,
-                ),*/
-                Positioned(
-                  top: Dimensions.heightSize * 2,
-                  left: Dimensions.marginSize,
-                  right: Dimensions.marginSize,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          if (scaffoldKey.currentState.isDrawerOpen) {
-                            scaffoldKey.currentState.openEndDrawer();
-                          } else {
-                            scaffoldKey.currentState.openDrawer();
-                          }
-                        },
-                        child: Icon(
-                          Icons.menu,
-                          color: CustomColor.primaryColor,
-                        ), //your button
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )*/
       ),
     );
   }
