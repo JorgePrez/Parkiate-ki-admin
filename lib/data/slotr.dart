@@ -1,41 +1,20 @@
-class Slot {
+class SlotR {
   final int id;
   final String name;
   final bool isAvailable;
 
-  const Slot({this.id, this.name, this.isAvailable});
-
+  const SlotR({this.id, this.name, this.isAvailable});
 }
 
 class SlotList {
-  static List<Slot> list() {
-    const data = <Slot> [
-      Slot(
-        id: 1,
-        name: 'P1',
-        isAvailable: true
-      ),
-      Slot(
-          id: 2,
-          name: 'P2',
-          isAvailable: false
-      ),
-      Slot(
-          id: 3,
-          name: 'P3',
-          isAvailable: false
-      ),
-      Slot(
-          id: 4,
-          name: 'P4',
-          isAvailable: false
-      ),
-      Slot(
-          id: 5,
-          name: 'P5',
-          isAvailable: true
-      ),
-     /* Slot(
+  static List<SlotR> list() {
+    const data = <SlotR>[
+      SlotR(id: 1, name: 'P1', isAvailable: true),
+      SlotR(id: 2, name: 'P2', isAvailable: false),
+      SlotR(id: 3, name: 'P3', isAvailable: false),
+      SlotR(id: 4, name: 'P4', isAvailable: false),
+      SlotR(id: 5, name: 'P5', isAvailable: true),
+      /* Slot(
           id: 6,
           name: 'P6',
           isAvailable: false
@@ -73,5 +52,4 @@ class SlotList {
     ];
     return data;
   }
-
 }

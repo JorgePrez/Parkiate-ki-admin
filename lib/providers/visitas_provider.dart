@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:parkline/api/environment.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/visita.dart';
+import 'package:parkline/models/visita_admin.dart';
 import 'package:http/http.dart' as http;
 
 class VisitasProvider {
@@ -79,6 +80,52 @@ class VisitasProvider {
       print(data);
 
       Visita visita = Visita.fromJsonList(data);
+      print(visita.toList);
+      return visita.toList;
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
+
+  Future<List<Visita_admin>> all(String id_parqueo) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/all');
+
+      String bodyParams = json.encode({
+        'id_parqueo': id_parqueo,
+      });
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      print(data);
+
+      Visita_admin visita = Visita_admin.fromJsonList(data);
+      print(visita.toList);
+      return visita.toList;
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
+
+  Future<List<Visita_admin>> allcurrent(String id_parqueo) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/allcurrent');
+
+      String bodyParams = json.encode({
+        'id_parqueo': id_parqueo,
+      });
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      print(data);
+
+      Visita_admin visita = Visita_admin.fromJsonList(data);
       print(visita.toList);
       return visita.toList;
     } catch (e) {

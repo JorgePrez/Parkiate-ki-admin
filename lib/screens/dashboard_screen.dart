@@ -13,13 +13,17 @@ import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/resenia.dart';
 import 'package:parkline/models/parqueo.dart';
 import 'package:parkline/models/visita.dart';
+import 'package:parkline/models/visita_admin.dart';
 import 'package:parkline/models/visitas_app.dart';
 import 'package:parkline/providers/slots_provider.dart';
 import 'package:parkline/providers/visitas_provider.dart';
 import 'package:parkline/screens/choose_slot_screen.dart';
 import 'package:parkline/screens/choose_slot_screen_test.dart';
 import 'package:parkline/screens/dashboard/parking_currentlist.dart';
+import 'package:parkline/screens/dashboard/parking_history_screen_all%20current.dart';
+import 'package:parkline/screens/dashboard/parking_history_screen_all.dart';
 import 'package:parkline/screens/dashboard/parking_history_screen_full.dart';
+import 'package:parkline/screens/dashboard/parking_history_screen_slot.dart';
 import 'package:parkline/screens/dashboard/scan_qr_launcher.dart';
 import 'package:parkline/screens/dashboard/scan_qr_screen.dart';
 import 'package:parkline/screens/estado_parqueo.dart';
@@ -215,9 +219,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ListTile(
                 title: Text(
                   'Información Sobre Parqueo',
-                  style: CustomStyle.listStyle,
+                  style: CustomStyle.textStylebold,
                 ),
-                trailing: Icon(Icons.local_parking_outlined),
+                trailing: Icon(
+                  Icons.local_parking_outlined,
+                  color: CustomColor.primaryColor,
+                ),
                 onTap: () async {
                   var longlatitud = double.parse(widget.latitude);
                   var longlongitud = double.parse(widget.longitude);
@@ -277,18 +284,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 padding: const EdgeInsets.only(
                     left: Dimensions.marginSize, right: Dimensions.marginSize),
                 child: Divider(
-                  color: Colors.black.withOpacity(0.4),
+                  color: Colors.black.withOpacity(0.4), //
                 ),
               ),
               ListTile(
                 title: Text(
-                  'Visitas Actuales',
-                  style: CustomStyle.listStyle,
+                  'Visitas Actuales (solo usuarios de app móvil)',
+                  style: CustomStyle.textStylebold,
                 ),
-                trailing: Icon(FontAwesomeIcons.carAlt),
+                trailing: Icon(
+                  FontAwesomeIcons.mobileAlt,
+                  color: CustomColor.primaryColor,
+                ),
                 onTap: () async {
                   List<Visita> lista_visitas =
                       await visitasProvider.getcurrents(widget.id_parqueo);
+
+                  if (lista_visitas.length > 3) {
+                    lista_visitas.add(lista_visitas.last);
+                  }
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
@@ -305,13 +319,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               ListTile(
                 title: Text(
-                  'Historial de visitas desde app',
-                  style: CustomStyle.listStyle,
+                  'Historial de visitas (usuarios de app móvil)',
+                  style: CustomStyle.textStylebold,
                 ),
-                trailing: Icon(Icons.history),
+                trailing: Icon(
+                  Icons.history,
+                  color: CustomColor.primaryColor,
+                ),
                 onTap: () async {
                   List<Visita> lista_visitas =
                       await visitasProvider.getbypark(widget.id_parqueo);
+
+                  if (lista_visitas.length > 3) {
+                    lista_visitas.add(lista_visitas.last);
+                  }
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
@@ -329,9 +350,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ListTile(
                 title: Text(
                   'Escanear QR de Clientes ( usuarios que han descargado la app móvil)',
-                  style: CustomStyle.listStyle,
+                  style: CustomStyle.textStylebold,
                 ),
-                trailing: Icon(Icons.qr_code_2_outlined),
+                trailing: Icon(
+                  Icons.qr_code_2_outlined,
+                  color: CustomColor.primaryColor,
+                ),
                 onTap: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
@@ -347,75 +371,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               ListTile(
                 title: Text(
-                  'Entradas y Salidas Por Placa',
-                  style: CustomStyle.listStyle,
-                ),
-                trailing: Icon(Icons.camera_enhance_outlined),
-                onTap: () async {
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
-
-                  print(lista);
-
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: Dimensions.marginSize, right: Dimensions.marginSize),
-                child: Divider(
-                  color: Colors.black.withOpacity(0.4),
-                ),
-              ),
-              ListTile(
-                title: Text(
                   "Ver Espacios ( libres / ocupados)",
-                  style: CustomStyle.listStyle,
+                  style: CustomStyle.textStylebold,
                 ),
-                trailing: Icon(Icons.grid_view_outlined),
+                trailing: Icon(
+                  Icons.grid_view_outlined,
+                  color: CustomColor.primaryColor,
+                ),
                 onTap: () async {
-                  List<Slot> lista =
+                  List<Slot> listaslot =
                       await parqueosProvider.allslots((widget.id_parqueo));
 
-                  print(lista);
-
-                  //TODO: HACER AQUI EL WIDGET QUE RECIBIRA LA LISTA
-
-/*
-                  Navigator.of(context).pop();
-
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => EstadoParqueo(
-                            id_parqueo_firebase: widget.id_parqueo_firebase,
-                          )));*/
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: Dimensions.marginSize, right: Dimensions.marginSize),
-                child: Divider(
-                  color: Colors.black.withOpacity(0.4),
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  'Visitas dentro de tu parqueo de usuarios desde la app móvil',
-                  style: CustomStyle.listStyle,
-                ),
-                trailing: Icon(Icons.mobile_friendly_outlined),
-                onTap: () async {
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
-
-                  print(lista);
+                  if (listaslot.length > 3) {
+                    listaslot.add(listaslot.last);
+                  }
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
+                          ParkingHistoryScreenSlot(listaservicios: listaslot)));
                 },
               ),
               Padding(
@@ -427,17 +401,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               ListTile(
                 title: Text(
-                  'Historial de visitas recientes de usuarios desde app móvil',
-                  style: CustomStyle.listStyle,
+                  "Listado de visitas actuales",
+                  style: CustomStyle.textStylebold,
                 ),
-                trailing: Icon(Icons.history_outlined),
+                trailing: Icon(
+                  FontAwesomeIcons.carAlt,
+                  color: CustomColor.primaryColor,
+                ),
                 onTap: () async {
-                  List<Visita> lista_visitas =
-                      await visitasProvider.getbypark(widget.id_parqueo);
+                  List<Visita_admin> lista_visitas =
+                      await visitasProvider.allcurrent(widget.id_parqueo);
+
+                  if (lista_visitas.length > 3) {
+                    lista_visitas.add(lista_visitas.last);
+                  }
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ParkingHistoryScreenFull(
+                      builder: (context) => ParkingHistoryScreenAllCurrent(
                           listaservicios: lista_visitas)));
                 },
               ),
@@ -450,45 +431,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               ListTile(
                 title: Text(
-                  'Servicios Actuales',
-                  style: CustomStyle.listStyle,
+                  "Registro/ Historial de todas las visitas ",
+                  style: CustomStyle.textStylebold,
                 ),
-                trailing: Icon(Icons.airport_shuttle_outlined),
+                trailing: Icon(
+                  Icons.book_outlined,
+                  color: CustomColor.primaryColor,
+                ),
                 onTap: () async {
-                  List<Servicioadminimagen> lista = await serviciosProvider
-                      .parkhistoryactuales(widget.id_parqueo);
+                  List<Visita_admin> lista_visitas =
+                      await visitasProvider.all(widget.id_parqueo);
 
-                  print(lista);
+                  if (lista_visitas.length > 3) {
+                    lista_visitas.add(lista_visitas.last);
+                  }
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen2(listaservicios: lista)));
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: Dimensions.marginSize, right: Dimensions.marginSize),
-                child: Divider(
-                  color: Colors.black.withOpacity(0.4),
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  'Historial de Servicios',
-                  style: CustomStyle.listStyle,
-                ),
-                trailing: Icon(Icons.history_edu_outlined),
-                onTap: () async {
-                  List<Servicioadminimagen> lista =
-                      await serviciosProvider.parkhistory(widget.id_parqueo);
-
-                  print(lista);
-
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen2(listaservicios: lista)));
+                      builder: (context) => ParkingHistoryScreenAll(
+                          listaservicios: lista_visitas)));
                 },
               ),
               Padding(
@@ -501,9 +462,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ListTile(
                 title: Text(
                   'CERRAR SESIÓN',
-                  style: CustomStyle.listStyle,
+                  style: CustomStyle.textStylebold,
                 ),
-                trailing: Icon(Icons.logout),
+                trailing: Icon(
+                  Icons.logout,
+                  color: CustomColor.primaryColor,
+                ),
                 onTap: () {
                   //   Navigator.pushReplacementNamed(context, 'signin');
 
@@ -534,18 +498,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: BoxDecoration(
                   color: _colorContainer1, // Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.black26)),
+                  border: Border.all(width: 3.0, color: Colors.black26)),
               child: ListTile(
-                leading: Icon(Icons.local_parking_outlined, size: 40.0),
+                leading: Icon(
+                  Icons.local_parking_outlined,
+                  size: 40.0,
+                  color: CustomColor.primaryColor,
+                ),
                 title: Text(
                   'Mí Parqueo',
                   style: TextStyle(
-                    color: Colors.black,
-                  ),
+                      color: CustomColor.primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
                   'Aquí podrás ver la información que has registrado sobre tu parqueo',
-                  style: TextStyle(color: Colors.black),
+                  style: CustomStyle.textStylebold,
                 ),
                 selected: true,
                 onTap: () async {
@@ -619,18 +587,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: BoxDecoration(
                   color: _colorContainer2,
                   borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.black26)),
+                  border: Border.all(width: 3.0, color: Colors.black26)),
               child: ListTile(
-                leading: Icon(FontAwesomeIcons.carAlt, size: 40.0),
+                leading: Icon(
+                  FontAwesomeIcons.mobileAlt,
+                  size: 40.0,
+                  color: CustomColor.primaryColor,
+                ),
                 title: Text(
                   'Visitas Actuales',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: CustomColor.primaryColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
                   'Usuarios de la app móvil que estan dentro de tu parqueo',
-                  style: TextStyle(color: Colors.black),
+                  style: CustomStyle.textStylebold,
                 ),
                 selected: true,
                 onTap: () async {
@@ -643,6 +616,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                   List<Visita> lista_visitas =
                       await visitasProvider.getcurrents(widget.id_parqueo);
+
+                  if (lista_visitas.length > 3) {
+                    lista_visitas.add(lista_visitas.last);
+                  }
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
@@ -659,18 +636,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: BoxDecoration(
                   color: _colorContainer3,
                   borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.black26)),
+                  border: Border.all(width: 3.0, color: Colors.black26)),
               child: ListTile(
-                leading: Icon(Icons.history, size: 40.0),
+                leading: Icon(
+                  Icons.history,
+                  size: 40.0,
+                  color: CustomColor.primaryColor,
+                ),
                 title: Text(
                   'Historial de visitas desde app',
                   style: TextStyle(
-                    color: Colors.black,
-                  ),
+                      color: CustomColor.primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
                   'Registro de las visitas(finalizadas) de los usuarios que usan la aplicación ',
-                  style: TextStyle(color: Colors.black),
+                  style: CustomStyle.textStylebold,
                 ),
                 selected: true,
                 onTap: () async {
@@ -680,9 +661,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         : Color(0xEEEEE4);
                     ;
                   });
-
                   List<Visita> lista_visitas =
                       await visitasProvider.getbypark(widget.id_parqueo);
+
+                  if (lista_visitas.length > 3) {
+                    lista_visitas.add(lista_visitas.last);
+                  }
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
@@ -699,18 +683,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: BoxDecoration(
                   color: _colorContainer4,
                   borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.black26)),
+                  border: Border.all(width: 3.0, color: Colors.black26)),
               child: ListTile(
-                leading: Icon(Icons.qr_code_2_sharp, size: 40.0),
+                leading: Icon(
+                  Icons.qr_code_2_sharp,
+                  size: 40.0,
+                  color: CustomColor.primaryColor,
+                ),
                 title: Text(
                   'Escanear QR de usuarios',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: CustomColor.primaryColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
                   'Escanea el QR de los usuarios para registrar que visitaron tu parqueo',
-                  style: TextStyle(color: Colors.black),
+                  style: CustomStyle.textStylebold,
                 ),
                 selected: true,
                 onTap: () async {
@@ -724,21 +713,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ScanPageLauncher()));
-
-                  /*setState(() {
-                    _selectedOption = index - 1;
-                  });*/
-                  /*
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
-
-                  print(lista);
-
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                          */
                 },
               ),
             ),
@@ -750,18 +724,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: BoxDecoration(
                   color: _colorContainer5,
                   borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.black26)),
+                  border: Border.all(width: 3.0, color: Colors.black26)),
               child: ListTile(
-                leading: Icon(FontAwesomeIcons.square, size: 40.0),
+                leading: Icon(
+                  FontAwesomeIcons.square,
+                  size: 40.0,
+                  color: CustomColor.primaryColor,
+                ),
                 title: Text(
                   'Espacios Libres/Ocupados',
                   style: TextStyle(
-                    color: Colors.black,
-                  ),
+                      color: CustomColor.primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
                   'Aquí podrás ver cuales espacios estan libres u ocupados y los autos que encuentran en ellos',
-                  style: TextStyle(color: Colors.black),
+                  style: CustomStyle.textStylebold,
                 ),
                 selected: true,
                 onTap: () async {
@@ -772,20 +750,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ;
                   });
 
-                  /*setState(() {
-                    _selectedOption = index - 1;
-                  });*/
-                  /*
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
+                  List<Slot> listaslot =
+                      await parqueosProvider.allslots((widget.id_parqueo));
 
-                  print(lista);
+                  if (listaslot.length > 3) {
+                    listaslot.add(listaslot.last);
+                  }
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                          */
+                          ParkingHistoryScreenSlot(listaservicios: listaslot)));
                 },
               ),
             ),
@@ -797,18 +772,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: BoxDecoration(
                   color: _colorContainer6,
                   borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.black26)),
+                  border: Border.all(width: 3.0, color: Colors.black26)),
               child: ListTile(
-                leading: Icon(FontAwesomeIcons.video, size: 35.0), //40
+                leading: Icon(
+                  FontAwesomeIcons.carAlt,
+                  size: 35.0,
+                  color: CustomColor.primaryColor,
+                ), //40
                 title: Text(
-                  'Pestaña Opcional',
+                  'Todas las visitas actuales',
                   style: TextStyle(
-                    color: Colors.black,
-                  ),
+                      color: CustomColor.primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                  'Registro de los autos (y sus placas) por medio de las cámaras de entrada y de salida',
-                  style: TextStyle(color: Colors.black),
+                  'Aquí podrás ver todos los autos que estan dentro de tu parqueo',
+                  style: CustomStyle.textStylebold,
                 ),
                 selected: true,
                 onTap: () async {
@@ -819,20 +798,65 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ;
                   });
 
-                  /*setState(() {
-                    _selectedOption = index - 1;
-                  });*/
-                  /*
-                  List<Serviciotrue> lista = await serviciosProvider
-                      .parkhistorytruesorry(widget.id_parqueo);
+                  List<Visita_admin> lista_visitas =
+                      await visitasProvider.allcurrent(widget.id_parqueo);
 
-                  print(lista);
+                  if (lista_visitas.length > 3) {
+                    lista_visitas.add(lista_visitas.last);
+                  }
 
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          ParkingHistoryScreen(listaservicios: lista)));
-                          */
+                      builder: (context) => ParkingHistoryScreenAllCurrent(
+                          listaservicios: lista_visitas)));
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: 80.0,
+              decoration: BoxDecoration(
+                  color: _colorContainer6,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(width: 3.0, color: Colors.black26)),
+              child: ListTile(
+                leading: Icon(
+                  Icons.book_outlined,
+                  size: 35.0,
+                  color: CustomColor.primaryColor,
+                ), //40
+                title: Text(
+                  'Historial completo',
+                  style: TextStyle(
+                      color: CustomColor.primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  'Registro de todos los autos que han visitado tu parqueo (finalizados)',
+                  style: CustomStyle.textStylebold,
+                ),
+                selected: true,
+                onTap: () async {
+                  setState(() {
+                    _colorContainer6 = _colorContainer6 == Color(0xEEEEE4)
+                        ? Colors.white
+                        : Color(0xEEEEE4);
+                    ;
+                  });
+
+                  List<Visita_admin> lista_visitas =
+                      await visitasProvider.all(widget.id_parqueo);
+
+                  if (lista_visitas.length > 3) {
+                    lista_visitas.add(lista_visitas.last);
+                  }
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ParkingHistoryScreenAll(
+                          listaservicios: lista_visitas)));
                 },
               ),
             ),
@@ -843,28 +867,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   profileWidget(BuildContext context) {
+    double ancho = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.only(
-        top: Dimensions.heightSize * 3, //*3
-      ),
-      child: ListTile(
-        leading: Image.network(
-          widget.imagenes,
-        ),
-        title: Text(
-          '${widget?.nombre_empresa ?? ''}',
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: Dimensions.largeTextSize,
-              fontWeight: FontWeight.bold),
-        ),
-        /*subtitle: Text(
-          '${widget?.correo ?? ''}',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: Dimensions.defaultTextSize,
+          // top: Dimensions.heightSize * 0.5, //*3
           ),
-        ),*/
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 1, //1
+            child: GestureDetector(
+              onTap: () {},
+              child: Image.network(widget.imagenes),
+            ),
+          ),
+          SizedBox(
+            width: ancho / 20,
+          ),
+          Expanded(
+            flex: 1, //
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center, //.start
+              children: [
+                SizedBox(height: Dimensions.heightSize * 0.5), //heightSize
+                Text(
+                  '${widget?.nombre_empresa ?? ''}',
+                  style: TextStyle(
+                      fontSize: Dimensions.largeTextSize,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -879,484 +918,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           top: Dimensions.heightSize * 3),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /*
-          Text('Bienvenido ${widget?.nombre ?? ''}!!!',
-              style: CustomStyle.textStyle),
-          Text(
-            '¿Donde deseas estacionarte?',
-            style: TextStyle(
-              fontSize: Dimensions.largeTextSize * 1.5,
-              color: Colors.black,
-            ),
-          ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
-          Row(
-            children: [
-              Expanded(
-                flex: 4,
-                child: TextFormField(
-                  style: CustomStyle.textStyle,
-                  controller: searchController,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return 'Por favor completa el campo';
-                    } else {
-                      return null;
-                    }
-                  },
-                  decoration: InputDecoration(
-                      labelText: 'Buscar Parqueos',
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 10.0),
-                      labelStyle: CustomStyle.textStyle,
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintStyle: CustomStyle.textStyle,
-                      focusedBorder: CustomStyle.focusBorder,
-                      enabledBorder: CustomStyle.focusErrorBorder,
-                      focusedErrorBorder: CustomStyle.focusErrorBorder,
-                      errorBorder: CustomStyle.focusErrorBorder,
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: CustomColor.primaryColor,
-                      )),
-                ),
-              ),
-              SizedBox(
-                width: Dimensions.widthSize,
-              ),
-              Expanded(
-                flex: 1,
-                child: GestureDetector(
-                  child: Container(
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(Dimensions.radius)),
-                        border:
-                            Border.all(color: Colors.black.withOpacity(0.1))),
-                    child: Image.asset(selectedVehicle2),
-                  ),
-                  onTap: () {
-                    // showVehicleBottomSheet(context);
-                  },
-                ),
-              )
-            ],
-          ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
-          Divider(
-            color: Colors.black.withOpacity(0.50),
-          ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
-          GestureDetector(
-            child: Container(
-              height: 50.0,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: CustomColor.primaryColor,
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(Dimensions.radius))),
-              child: Center(
-                child: Text(
-                  'CONFIRMAR',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: Dimensions.largeTextSize),
-                ),
-              ),
-            ),
-            onTap: () async {
-              String keyword = searchController.text.trim();
-              listaconcidencias = await parqueosProvider.buscar(keyword);
-
-              print(keyword);
-              setState(() {
-                isConfirm = !isConfirm;
-                print(isConfirm.toString());
-              });
-            },
-          ),*/
-        ],
+        children: [],
       ),
     );
   }
-
-  /* parkingPointWidget(BuildContext context) {
-    final ReseniasProvider reseniasProvider = new ReseniasProvider();
-    final ParqueosProvider parqueosProvider = new ParqueosProvider();
-
-    return Padding(
-      padding: const EdgeInsets.only(top: Dimensions.heightSize * 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-                left: Dimensions.marginSize, right: Dimensions.marginSize),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      child: Icon(Icons.arrow_back),
-                      onTap: () {
-                        setState(() {
-                          isConfirm = !isConfirm;
-                          print(isConfirm.toString());
-                        });
-                      },
-                    ),
-                    Text('Desliza para hallar más',
-                        style: CustomStyle.textStyle),
-                  ],
-                ),
-                SizedBox(
-                  height: Dimensions.heightSize,
-                ),
-                Text(
-                  'Elige tu lugar de estacionamiento',
-                  style: TextStyle(
-                    fontSize: Dimensions.largeTextSize * 1.5,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-                itemCount:
-                    listaconcidencias.length, //parqueosService.parqueos.length,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  Parqueo parkingPoint = listaconcidencias[index];
-
-                  var longlatitud = double.parse(parkingPoint.latitude);
-                  var longlongitud = double.parse(parkingPoint.longitude);
-                  var arr = parkingPoint.detalles.split(' ');
-                  var det1;
-                  var det2;
-                  var det3;
-                  var det4;
-
-                  if (arr[0] == '1') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                  } else if (arr[0] == '2') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                  } else if (arr[0] == '3') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                  } else if (arr[0] == '4') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                  } else if (arr[0] == '5') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                  } else if (arr[0] == '6') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                  } else if (arr[0] == '7') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                  } else if (arr[0] == '8') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                  } else if (arr[0] == '9') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                  } else if (arr[0] == 'A') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                  } else if (arr[0] == 'B') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                  } else if (arr[0] == 'C') {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                  } else {
-                    det1 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                  }
-
-                  if (arr[1] == '1') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                  } else if (arr[1] == '2') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                  } else if (arr[1] == '3') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                  } else if (arr[1] == '4') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                  } else if (arr[1] == '5') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                  } else if (arr[1] == '6') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                  } else if (arr[1] == '7') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                  } else if (arr[1] == '8') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                  } else if (arr[1] == '9') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                  } else if (arr[1] == 'A') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                  } else if (arr[1] == 'B') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                  } else if (arr[1] == 'C') {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                  } else {
-                    det2 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                  }
-
-                  if (arr[2] == '1') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                  } else if (arr[2] == '2') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                  } else if (arr[2] == '3') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                  } else if (arr[2] == '4') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                  } else if (arr[2] == '5') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                  } else if (arr[2] == '6') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                  } else if (arr[2] == '7') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                  } else if (arr[2] == '8') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                  } else if (arr[2] == '9') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                  } else if (arr[2] == 'A') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                  } else if (arr[2] == 'B') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                  } else if (arr[2] == 'C') {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                  } else {
-                    det3 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                  }
-
-                  if (arr[3] == '1') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-                  } else if (arr[3] == '2') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-                  } else if (arr[3] == '3') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-                  } else if (arr[3] == '4') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-                  } else if (arr[3] == '5') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-                  } else if (arr[3] == '6') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-                  } else if (arr[3] == '7') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-                  } else if (arr[3] == '8') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-                  } else if (arr[3] == '9') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-                  } else if (arr[3] == 'A') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-                  } else if (arr[3] == 'B') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-                  } else if (arr[3] == 'C') {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-                  } else {
-                    det4 =
-                        'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-                  }
-
-                  return Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: Dimensions.heightSize),
-                    child: GestureDetector(
-                      child: Container(
-                        height: 100,
-                        color: CustomColor.secondaryColor,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: Dimensions.marginSize,
-                              right: Dimensions.marginSize),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Image.network(parkingPoint
-                                    .imagenes), //  child: Image.asset(parkingPoint.image),
-                              ),
-                              SizedBox(
-                                width: Dimensions.widthSize,
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      parkingPoint
-                                          .nombreEmpresa, //                                      parkingPoint.name,
-
-                                      style: TextStyle(
-                                          fontSize: Dimensions.largeTextSize,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: Dimensions.heightSize * 0.5,
-                                    ),
-                                    Text(
-                                      parkingPoint.direccion,
-                                      style: CustomStyle.textStyle,
-                                    ),
-                                    SizedBox(
-                                      height: Dimensions.heightSize * 0.5,
-                                    ),
-                                    Text(
-                                      'Q${parkingPoint.hora} por hora',
-                                      style: TextStyle(
-                                          fontSize: Dimensions.largeTextSize,
-                                          color: CustomColor.primaryColor),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      onTap: () async {
-                        List<Resenia> listar = await reseniasProvider
-                            .reviewsbyPark(parkingPoint.idParqueo);
-
-                        //Obtener cantidad de espacios disponbiles
-
-                        ResponseApi responseApiespacios = await parqueosProvider
-                            .getslots(parkingPoint.idParqueo);
-
-                        Espacios espacios =
-                            Espacios.fromJson(responseApiespacios.data);
-
-                        String ocupados = espacios.espaciosOcupados;
-                        int espaciodisponibles =
-                            int.parse(parkingPoint.capacidadMaxima) -
-                                int.parse(ocupados);
-
-                        String espacioslibres = espaciodisponibles.toString();
-
-                        print('ESPACIOS: ${espacioslibres}');
-
-                        // print(listar);
-
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ParkingPointDetailsScreen(
-                                idpark: parkingPoint.idParqueo,
-                                name: parkingPoint
-                                    .nombreEmpresa, //        name: parkingPoint.name,
-                                amount: parkingPoint.capacidadMaxima,
-                                image: parkingPoint.imagenes,
-                                address: parkingPoint.direccion,
-                                slots: espacioslibres,
-                                mediahora: parkingPoint.mediaHora,
-                                hora: parkingPoint.hora,
-                                dia: parkingPoint.dia,
-                                mes: parkingPoint.mes,
-                                lunesEntrada: parkingPoint.lunesApertura,
-                                lunesCierre: parkingPoint.lunesCierre,
-                                martesEntrada: parkingPoint.martesApertura,
-                                martesSalida: parkingPoint.martesCierre,
-                                detalles: parkingPoint.detalles,
-                                detalles1: det1,
-                                detalles2: det2,
-                                detalles3: det3,
-                                detalles4: det4,
-                                latitude: longlatitud,
-                                longitude: longlongitud,
-                                miercolesEntrada:
-                                    parkingPoint.miercolesApertura,
-                                miercolesSalida: parkingPoint.miercolesCierre,
-                                juevesEntrada: parkingPoint.juevesApertura,
-                                juevesSalida: parkingPoint.juevesCierre,
-                                viernesEntrada: parkingPoint.viernesApertura,
-                                viernesSalida: parkingPoint.viernesCierre,
-                                sabadoEntrada: parkingPoint.sabadoApertura,
-                                sabadoSalida: parkingPoint.sabadoCierre,
-                                domingoEntrada: parkingPoint.domingoApertura,
-                                domingoSalida: parkingPoint.domingoCierre,
-                                controlPagos: parkingPoint.controlPagos,
-                                idusuario: widget.id,
-                                nombreusuario: widget.nombre,
-                                telefono: widget.telefono,
-                                modelo_auto: widget.modelo_auto,
-                                placa_auto: widget.placa_auto,
-                                imagen_usuario: widget.imagen,
-                                listaresenias: listar)));
-                      },
-                    ),
-                  );
-                }),
-          )
-        ],
-      ),
-    );
-  }*/
 
   void showVehicleBottomSheet(BuildContext context) {
     showModalBottomSheet(

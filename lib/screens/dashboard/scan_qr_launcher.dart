@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:parkline/models/adminparqueo.dart';
+import 'package:parkline/models/parqueofirebase.dart';
 import 'package:parkline/models/prize.dart';
 import 'package:parkline/models/servicioadmin.dart';
 import 'package:parkline/models/serviciotrue.dart';
+import 'package:parkline/models/slots.dart';
 import 'package:parkline/providers/parqueos_provider.dart';
+import 'package:parkline/providers/visitas_provider.dart';
+import 'package:parkline/screens/dashboard/parking_history_screen_slot.dart';
 
 import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/utils/custom_style.dart';
@@ -33,6 +38,11 @@ class ScanPageLauncher extends StatefulWidget {
 }
 
 class _ScanPageLauncherState extends State<ScanPageLauncher> {
+  SharedPref _sharedPref = new SharedPref();
+  final ParqueosProvider parqueosProvider = new ParqueosProvider();
+
+  final VisitasProvider visitasProvider = new VisitasProvider();
+
   String _url = Enviroment.API_PARKIATE_KI2;
 
   String qrCodeResult;
@@ -49,6 +59,55 @@ class _ScanPageLauncherState extends State<ScanPageLauncher> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () async {
+              Parqueofirebase elparqueo = Parqueofirebase.fromJson(
+                  await _sharedPref.read('user') ?? {});
+
+              ResponseApi responseApiduenobyemail =
+                  await parqueosProvider.finddueniobyid(elparqueo.idDuenio);
+
+              print(responseApiduenobyemail.data);
+
+              Adminparqueo admin_parqueo =
+                  Adminparqueo.fromJson(responseApiduenobyemail.data);
+
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => DashboardScreen(
+                        id_parqueo: elparqueo.idParqueo,
+                        id_duenio: elparqueo.idDuenio,
+                        nombre_empresa: elparqueo.nombreEmpresa,
+                        direccion: elparqueo.direccion,
+                        capacidad_maxima: elparqueo.capacidadMaxima,
+                        media_hora: elparqueo.mediaHora,
+                        hora: elparqueo.hora,
+                        dia: elparqueo.dia,
+                        mes: elparqueo.mes,
+                        lunes_apertura: elparqueo.lunesApertura,
+                        lunes_cierres: elparqueo.lunesCierre,
+                        domingo_apertura: elparqueo.domingoApertura,
+                        domingo_cierre: elparqueo.domingoCierre,
+                        detalles: elparqueo.detalles,
+                        imagenes: elparqueo.imagenes,
+                        latitude: elparqueo.latitude,
+                        longitude: elparqueo.longitude,
+                        martes_apertura: elparqueo.martesApertura,
+                        martes_cierre: elparqueo.martesCierre,
+                        miercoles_apertura: elparqueo.miercolesApertura,
+                        miercoles_cierre: elparqueo.miercolesCierre,
+                        jueves_apertura: elparqueo.juevesApertura,
+                        jueves_cierre: elparqueo.juevesCierre,
+                        viernes_apertura: elparqueo.viernesApertura,
+                        viernes_cierre: elparqueo.viernesCierre,
+                        sabado_apertura: elparqueo.sabadoApertura,
+                        sabado_cierre: elparqueo.sabadoCierre,
+                        control_pagos: elparqueo.controlPagos,
+                        correo: admin_parqueo.email,
+                        id_parqueo_firebase: elparqueo.idFirebase,
+                      )));
+            },
+          ),
           backgroundColor: CustomColor.primaryColor,
           title: Text("Presiona este botón ---->"),
           actions: <Widget>[

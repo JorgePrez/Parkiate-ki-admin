@@ -19,6 +19,11 @@ class CustomStyle {
   static var listStyle =
       TextStyle(color: Colors.black, fontSize: Dimensions.defaultTextSize);
 
+  static var listStylebold = TextStyle(
+      color: Colors.black,
+      fontSize: Dimensions.defaultTextSize,
+      fontWeight: FontWeight.bold);
+
   static var defaultStyle =
       TextStyle(color: Colors.black, fontSize: Dimensions.largeTextSize);
 

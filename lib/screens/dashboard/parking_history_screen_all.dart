@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:parkline/models/adminparqueo.dart';
 import 'package:parkline/models/parqueofirebase.dart';
 import 'package:parkline/models/response_api.dart';
+import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/models/visita.dart';
+import 'package:parkline/models/visita_admin.dart';
 import 'package:parkline/providers/parqueos_provider.dart';
+import 'package:parkline/providers/usuarios_app_provider.dart';
 import 'package:parkline/providers/visitas_provider.dart';
 import 'package:parkline/screens/dashboard_screen.dart';
 import 'package:parkline/screens/parking_code_screen_details.dart';
-import 'package:parkline/screens/parking_code_screen_details2.dart';
 import 'package:parkline/screens/parking_code_screen_qr2.dart';
 
 import 'package:parkline/utils/dimensions.dart';
@@ -17,23 +19,25 @@ import 'package:parkline/utils/colors.dart';
 import 'package:parkline/models/servicioadmin.dart';
 import 'package:parkline/utils/shared_pref.dart';
 
-class ParkingCurrentlist extends StatefulWidget {
-  final List<Visita> listaservicios;
+class ParkingHistoryScreenAll extends StatefulWidget {
+  final List<Visita_admin> listaservicios;
 
-  ParkingCurrentlist({Key key, this.listaservicios}) : super(key: key);
+  ParkingHistoryScreenAll({Key key, this.listaservicios}) : super(key: key);
 
   @override
-  _ParkingCurrentListState createState() => _ParkingCurrentListState();
+  _ParkingHistoryScreenAllState createState() =>
+      _ParkingHistoryScreenAllState();
 }
 
-class _ParkingCurrentListState extends State<ParkingCurrentlist> {
-  final ParqueosProvider parqueosProvider = new ParqueosProvider();
+class _ParkingHistoryScreenAllState extends State<ParkingHistoryScreenAll> {
   SharedPref _sharedPref = new SharedPref();
+  final ParqueosProvider parqueosProvider = new ParqueosProvider();
 
   final VisitasProvider visitasProvider = new VisitasProvider();
-
   @override
   Widget build(BuildContext context) {
+    final UsuarioAppProvider usuarioAppProvider = new UsuarioAppProvider();
+
     bool valor = false;
     double ancho = MediaQuery.of(context).size.width;
 
@@ -137,8 +141,8 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
                           Parqueofirebase elparqueo = Parqueofirebase.fromJson(
                               await _sharedPref.read('user') ?? {});
 
-                          List<Visita> lista_visitas = await visitasProvider
-                              .getcurrents(elparqueo.idParqueo);
+                          List<Visita_admin> lista_visitas =
+                              await visitasProvider.all(elparqueo.idParqueo);
 
                           if (lista_visitas.length > 3) {
                             lista_visitas.add(lista_visitas.last);
@@ -146,7 +150,7 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
 
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: (context) => ParkingCurrentlist(
+                                  builder: (context) => ParkingHistoryScreenAll(
                                       listaservicios: lista_visitas)));
                         },
                       ),
@@ -161,7 +165,7 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
                       left: Dimensions.marginSize,
                       right: Dimensions.marginSize),
                   child: Text(
-                    'Usuarios de la aplicación movíl que están dentro de tu parqueo (registrados con QR)',
+                    'Registros de los autos que han usado tu parqueo (usando QR o de forma común)',
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: Dimensions.largeTextSize,
@@ -177,10 +181,11 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
                   child: ListView.builder(
                       itemCount: widget.listaservicios.length,
                       itemBuilder: (context, index) {
-                        Visita parkingHistory = widget.listaservicios[index];
+                        Visita_admin parkingHistory =
+                            widget.listaservicios[index];
 
                         String temporal_fecha =
-                            parkingHistory.timestampEntrada.substring(1, 11);
+                            parkingHistory.timestampSalida.substring(1, 11);
 
                         List<String> temporal_fecha_slipt =
                             temporal_fecha.split('-');
@@ -199,7 +204,10 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
                           valor_horario = ' ${parkingHistory.horaDeentrada}';
                         }*/
 
-                        if (parkingHistory.tipoRegistro == 'S') {
+                        String correo = '';
+                        String telefono = '';
+
+                        if (parkingHistory.idUsuarioApp == 'NA') {
                           valor = false;
                         } else {
                           valor = true;
@@ -217,27 +225,17 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
                             decoration: BoxDecoration(
                                 color: CustomColor.secondaryColor,
                                 border: Border.all(
-                                    width: 3.0,
-                                    color: CustomColor.primaryColor),
+                                  width: 3.0,
+                                  color: valor
+                                      ? Color(
+                                          0xFF8EFF9D) // RED ACCENT 0XFFFF1744
+                                      : CustomColor.accentColor,
+                                ),
                                 borderRadius: BorderRadius.all(
                                     Radius.circular(Dimensions.radius))),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                /* Container(
-                                    height: 25, //25
-                                    width: 200, //120     //,70, //60
-                                    decoration: BoxDecoration(
-                                        color: valor
-                                            ? Color(0xFFFFDD7A)
-                                            : Color(0xFF8EFF9D),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(Dimensions.radius *
-                                                2))), //2 //0.5
-                                    child: Center(
-                                        child: Text(valor
-                                            ? 'Registrado'
-                                            : 'Registrado con fotos'))),*/
                                 Expanded(
                                   flex: 1, //1
                                   child: GestureDetector(
@@ -253,6 +251,27 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center, //.start
                                     children: [
+                                      Container(
+                                          height: 25, //25
+                                          width:
+                                              150, //200 //120     //,70, //60
+                                          decoration: BoxDecoration(
+                                              color: valor
+                                                  ? Color(0xFF8EFF9D)
+                                                  : CustomColor
+                                                      .accentColor, //GREEN: 0xFF8EFF9D  GREEN ACNET: FF00E676
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(
+                                                      Dimensions.radius *
+                                                          2))), //2 //0.5
+                                          child: Center(
+                                              child: Text(
+                                            valor
+                                                ? 'Registro con QR'
+                                                : 'Registro común',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ))),
                                       SizedBox(
                                           height: Dimensions.heightSize *
                                               0.5), //heightSize
@@ -278,128 +297,7 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
                                               height:
                                                   Dimensions.heightSize * 0.3),
                                           ElevatedButton.icon(
-                                            onPressed: () {
-                                              String temporal_fecha_E =
-                                                  parkingHistory
-                                                      .timestampEntrada
-                                                      .substring(1, 11);
-                                              String temporal_hora_E =
-                                                  parkingHistory
-                                                      .timestampEntrada
-                                                      .substring(11);
-
-                                              String hora_E = temporal_hora_E
-                                                  .substring(0, 5);
-
-                                              List<String>
-                                                  temporal_fechaE_slipt =
-                                                  temporal_fecha_E.split('-');
-
-                                              String dia_e =
-                                                  temporal_fechaE_slipt[2]
-                                                      .trim();
-                                              String mes_e =
-                                                  temporal_fechaE_slipt[1];
-                                              String anio_e =
-                                                  temporal_fechaE_slipt[0];
-
-                                              String fecha_E =
-                                                  '${dia_e}/${mes_e}/${anio_e}';
-                                              String entrada =
-                                                  '${hora_E} - $fecha_E';
-
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ParkingCodeScreenDetails2(
-                                                            img_auto:
-                                                                parkingHistory
-                                                                    .imgAuto,
-                                                            numero_placa:
-                                                                parkingHistory
-                                                                    .numeroPlaca,
-                                                            timestamp_entrada:
-                                                                entrada,
-                                                            email:
-                                                                parkingHistory
-                                                                    .email,
-                                                            telefono:
-                                                                parkingHistory
-                                                                    .telefono,
-                                                            id_visita:
-                                                                parkingHistory
-                                                                    .idVisita,
-                                                            nombre_parqueo:
-                                                                parkingHistory
-                                                                    .nombreParqueo,
-                                                            direccion:
-                                                                parkingHistory
-                                                                    .direccion,
-                                                          )));
-                                            },
-                                            icon: Icon(
-                                              // <-- Icon
-                                              Icons.remove_red_eye_outlined,
-                                              size: 24.0, //24
-                                            ),
-                                            label: Text(
-                                                'Ver Detalles'), // <-- Text
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )
-                                ////
-                                ///  Expanded(
-                                /*  flex: 1, //2
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center, //.start
-                                    children: [
-                                      Container(
-                                          height: 25, //25
-                                          width: 200, //120     //,70, //60
-                                          decoration: BoxDecoration(
-                                              color: valor
-                                                  ? Color(0xFFFFDD7A)
-                                                  : Color(0xFF8EFF9D),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(
-                                                      Dimensions.radius *
-                                                          2))), //2 //0.5
-                                          child: Center(
-                                              child: Text(valor
-                                                  ? 'Registrado'
-                                                  : 'Registrado con fotos'))),
-                                      SizedBox(
-                                          height: Dimensions.heightSize *
-                                              0.5), //heightSize
-
-                                      Text(
-                                        'Placa: ${parkingHistory.numeroPlaca}',
-                                        style: TextStyle(
-                                            fontSize: Dimensions.largeTextSize,
-                                            color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                          height: Dimensions.heightSize *
-                                              0.5), //0.5
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center, //-staert
-                                        children: [
-                                          Text(
-                                            'Fecha de visita: $fecha',
-                                            style: CustomStyle.textStyle,
-                                          ),
-                                          SizedBox(
-                                              height:
-                                                  Dimensions.heightSize * 0.3),
-                                          ElevatedButton.icon(
-                                            onPressed: () {
+                                            onPressed: () async {
                                               //formato de hora  08:00-27/06/2022
 
                                               //tiempo_total: 00-00-56-41
@@ -514,6 +412,25 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
                                                   '${hora_S} - $fecha_S';
                                               //tiempo total
 
+                                              if (parkingHistory.idUsuarioApp ==
+                                                  'NA') {
+                                                correo = 'N/A';
+                                                telefono = 'N/A';
+                                              } else {
+                                                ResponseApi user_app_true =
+                                                    await usuarioAppProvider
+                                                        .getById(int.parse(
+                                                            parkingHistory
+                                                                .idUsuarioApp)); //○8
+
+                                                UsuarioApp user2 =
+                                                    UsuarioApp.fromJson(
+                                                        user_app_true.data);
+
+                                                correo = user2.email;
+                                                telefono = user2.telefono;
+                                              }
+
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -531,12 +448,8 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
                                                                 entrada,
                                                             timestamp_salida:
                                                                 salida,
-                                                            email:
-                                                                parkingHistory
-                                                                    .email,
-                                                            telefono:
-                                                                parkingHistory
-                                                                    .telefono,
+                                                            email: correo,
+                                                            telefono: telefono,
                                                             id_visita:
                                                                 parkingHistory
                                                                     .idVisita,
@@ -556,48 +469,13 @@ class _ParkingCurrentListState extends State<ParkingCurrentlist> {
                                             label: Text(
                                                 'Ver Detalles'), // <-- Text
                                           ),
-                                          /* Text(
-                                           ' ${valor_horario}',
-                                            style: TextStyle(
-                                                fontSize:
-                                                    Dimensions.defaultTextSize,
-                                                color: Colors.black),
-                                          ),*/
-                                          /*Text(
-                                            parkingHistory.idParqueo,
-                                            style: TextStyle(
-                                                fontSize:
-                                                    Dimensions.defaultTextSize,
-                                                color: Colors.black),
-                                          ),*/
                                         ],
                                       ),
-                                      /*     SizedBox(
-                                        width: Dimensions.widthSize * 2,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            parkingHistory.fecha,
-                                            style: CustomStyle.textStyle,
-                                          ),
-                                          SizedBox(
-                                              height:
-                                                  Dimensions.heightSize * 0.3),
-                                          Text(
-                                            ' ${valor_horario}',
-                                            style: TextStyle(
-                                                fontSize:
-                                                    Dimensions.defaultTextSize,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),*/
                                     ],
                                   ),
-                                )*/
+                                )
+                                ////
+                                ///  Expanded(
                               ],
                             ),
                           ),

@@ -148,7 +148,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                                         Adminparqueo.fromJson(
                                             responseApiduenobyemail.data);
 
-                                    Navigator.of(context).push(
+                                    Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 DashboardScreen(

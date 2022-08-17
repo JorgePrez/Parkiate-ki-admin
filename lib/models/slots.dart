@@ -39,8 +39,8 @@ class Slot {
   String estado;
   String reservas;
   String imgSlot;
-  DateTime timestampCambioOcupado;
-  DateTime timestampCambioVacio;
+  String timestampCambioOcupado;
+  String timestampCambioVacio;
   List<Slot> toList = [];
 
   factory Slot.fromJson(Map<String, dynamic> json) => Slot(
@@ -49,9 +49,8 @@ class Slot {
         estado: json["estado"],
         reservas: json["reservas"],
         imgSlot: json["img_slot"],
-        timestampCambioOcupado:
-            DateTime.parse(json["timestamp_cambio_ocupado"]),
-        timestampCambioVacio: DateTime.parse(json["timestamp_cambio_vacio"]),
+        timestampCambioOcupado: json["timestamp_cambio_ocupado"],
+        timestampCambioVacio: json["timestamp_cambio_vacio"],
       );
 
   Slot.fromJsonList(List<dynamic> jsonList) {
@@ -68,7 +67,7 @@ class Slot {
         "estado": estado,
         "reservas": reservas,
         "img_slot": imgSlot,
-        "timestamp_cambio_ocupado": timestampCambioOcupado.toIso8601String(),
-        "timestamp_cambio_vacio": timestampCambioVacio.toIso8601String(),
+        "timestamp_cambio_ocupado": timestampCambioOcupado,
+        "timestamp_cambio_vacio": timestampCambioVacio,
       };
 }

@@ -221,68 +221,6 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
                   ),
                 ),
               ),
-              /* Positioned(
-                bottom: Dimensions.heightSize,
-                left: Dimensions.marginSize,
-                right: Dimensions.marginSize,
-                child: GestureDetector(
-                  child: Container(
-                    height: 50.0,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: CustomColor.primaryColor,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(Dimensions.radius))),
-                    child: Center(
-                      child: Text(
-                        'Elegir este parqueo',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: Dimensions.largeTextSize,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    if (widget.controlPagos == "S") {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ParkingDirectionScreen(
-                              direccion: widget.address,
-                              idparqueo: widget.idpark,
-                              imagenes: widget.image,
-                              nombreparqueo: widget.name,
-                              media_hora: widget.mediahora,
-                              hora: widget.hora,
-                              latitude: widget.latitude,
-                              longitude: widget.longitude,
-                              controlPagos: widget.controlPagos,
-                              idusuario: widget.idusuario,
-                              nombreusuario: widget.nombreusuario,
-                              telefono: widget.telefono,
-                              modelo_auto: widget.modelo_auto,
-                              placa_auto: widget.placa_auto,
-                              imagen_usuario: widget.imagen_usuario)));
-                    } else {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ParkingDirectionScreen2(
-                              direccion: widget.address,
-                              idparqueo: widget.idpark,
-                              imagenes: widget.image,
-                              nombreparqueo: widget.name,
-                              media_hora: widget.mediahora,
-                              hora: widget.hora,
-                              latitude: widget.latitude,
-                              longitude: widget.longitude,
-                              controlPagos: widget.controlPagos,
-                              idusuario: widget.idusuario,
-                              nombreusuario: widget.nombreusuario,
-                              telefono: widget.telefono,
-                              modelo_auto: widget.modelo_auto,
-                              placa_auto: widget.placa_auto)));
-                    }
-                  },
-                ),
-              )*/
             ],
           ),
         ),
@@ -2137,7 +2075,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '${review.nombreUsuario} dijo:',
+                                        '${review.nombreUsuario}:',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize:

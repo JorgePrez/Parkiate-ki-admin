@@ -1,6 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:parkline/models/adminparqueo.dart';
+import 'package:parkline/models/parqueofirebase.dart';
+import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/visita.dart';
+import 'package:parkline/models/visita_admin.dart';
+import 'package:parkline/providers/parqueos_provider.dart';
+import 'package:parkline/providers/visitas_provider.dart';
+import 'package:parkline/screens/dashboard/parking_history_screen_all%20current.dart';
+import 'package:parkline/screens/dashboard_screen.dart';
 import 'package:parkline/screens/parking_code_screen_details.dart';
 import 'package:parkline/screens/parking_code_screen_qr2.dart';
 
@@ -8,6 +16,7 @@ import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/utils/custom_style.dart';
 import 'package:parkline/utils/colors.dart';
 import 'package:parkline/models/servicioadmin.dart';
+import 'package:parkline/utils/shared_pref.dart';
 
 class ParkingHistoryScreenFull extends StatefulWidget {
   final List<Visita> listaservicios;
@@ -20,9 +29,14 @@ class ParkingHistoryScreenFull extends StatefulWidget {
 }
 
 class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
+  SharedPref _sharedPref = new SharedPref();
+  final ParqueosProvider parqueosProvider = new ParqueosProvider();
+
+  final VisitasProvider visitasProvider = new VisitasProvider();
   @override
   Widget build(BuildContext context) {
     bool valor = false;
+    double ancho = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: Scaffold(
@@ -33,20 +47,113 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize,
-                      top: Dimensions.marginSize),
-                  child: GestureDetector(
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: CustomColor.primaryColor,
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: Dimensions.marginSize,
+                          right: Dimensions.marginSize,
+                          top: Dimensions.marginSize),
+                      child: GestureDetector(
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: CustomColor.primaryColor,
+                        ),
+                        onTap: () async {
+                          Parqueofirebase elparqueo = Parqueofirebase.fromJson(
+                              await _sharedPref.read('user') ?? {});
+
+                          ResponseApi responseApiduenobyemail =
+                              await parqueosProvider
+                                  .finddueniobyid(elparqueo.idDuenio);
+
+                          print(responseApiduenobyemail.data);
+
+                          Adminparqueo admin_parqueo = Adminparqueo.fromJson(
+                              responseApiduenobyemail.data);
+
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => DashboardScreen(
+                                        id_parqueo: elparqueo.idParqueo,
+                                        id_duenio: elparqueo.idDuenio,
+                                        nombre_empresa: elparqueo.nombreEmpresa,
+                                        direccion: elparqueo.direccion,
+                                        capacidad_maxima:
+                                            elparqueo.capacidadMaxima,
+                                        media_hora: elparqueo.mediaHora,
+                                        hora: elparqueo.hora,
+                                        dia: elparqueo.dia,
+                                        mes: elparqueo.mes,
+                                        lunes_apertura: elparqueo.lunesApertura,
+                                        lunes_cierres: elparqueo.lunesCierre,
+                                        domingo_apertura:
+                                            elparqueo.domingoApertura,
+                                        domingo_cierre: elparqueo.domingoCierre,
+                                        detalles: elparqueo.detalles,
+                                        imagenes: elparqueo.imagenes,
+                                        latitude: elparqueo.latitude,
+                                        longitude: elparqueo.longitude,
+                                        martes_apertura:
+                                            elparqueo.martesApertura,
+                                        martes_cierre: elparqueo.martesCierre,
+                                        miercoles_apertura:
+                                            elparqueo.miercolesApertura,
+                                        miercoles_cierre:
+                                            elparqueo.miercolesCierre,
+                                        jueves_apertura:
+                                            elparqueo.juevesApertura,
+                                        jueves_cierre: elparqueo.juevesCierre,
+                                        viernes_apertura:
+                                            elparqueo.viernesApertura,
+                                        viernes_cierre: elparqueo.viernesCierre,
+                                        sabado_apertura:
+                                            elparqueo.sabadoApertura,
+                                        sabado_cierre: elparqueo.sabadoCierre,
+                                        control_pagos: elparqueo.controlPagos,
+                                        correo: admin_parqueo.email,
+                                        id_parqueo_firebase:
+                                            elparqueo.idFirebase,
+                                      )));
+                        },
+                      ),
                     ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                    SizedBox(
+                      width: ancho / 5,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: Dimensions.marginSize,
+                          right: Dimensions.marginSize,
+                          top: Dimensions.marginSize),
+                      child: GestureDetector(
+                        child: Icon(
+                          Icons.refresh_outlined,
+                          color: CustomColor.primaryColor,
+                          size: 35,
+                        ),
+                        onTap: () async {
+                          //obteniedo el usuario si es que ya esta almacenado en shared prefence
+
+                          Parqueofirebase elparqueo = Parqueofirebase.fromJson(
+                              await _sharedPref.read('user') ?? {});
+
+                          List<Visita> lista_visitas = await visitasProvider
+                              .getbypark(elparqueo.idParqueo);
+
+                          if (lista_visitas.length > 3) {
+                            lista_visitas.add(lista_visitas.last);
+                          }
+
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ParkingHistoryScreenFull(
+                                          listaservicios: lista_visitas)));
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: Dimensions.heightSize,
@@ -56,10 +163,11 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                       left: Dimensions.marginSize,
                       right: Dimensions.marginSize),
                   child: Text(
-                    'Registro de visitas (finalizadas) de los usuarios que utilizan la app móvil',
+                    'Registro de visitas (finalizadas) de los usuarios que utilizan la app móvil (QR) ',
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: Dimensions.largeTextSize),
+                        fontSize: Dimensions.largeTextSize,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(
@@ -110,8 +218,9 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                             height: 150.0, //120
                             decoration: BoxDecoration(
                                 color: CustomColor.secondaryColor,
-                                border:
-                                    Border.all(color: CustomColor.primaryColor),
+                                border: Border.all(
+                                    width: 3.0,
+                                    color: CustomColor.primaryColor),
                                 borderRadius: BorderRadius.all(
                                     Radius.circular(Dimensions.radius))),
                             child: Row(
@@ -153,7 +262,8 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                                         '   Placa : ${parkingHistory.numeroPlaca}',
                                         style: TextStyle(
                                             fontSize: Dimensions.largeTextSize,
-                                            color: Colors.black),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
                                           height: Dimensions.heightSize *
@@ -164,7 +274,7 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                                         children: [
                                           Text(
                                             '   Fecha: $fecha',
-                                            style: CustomStyle.textStyle,
+                                            style: CustomStyle.textStylebold,
                                           ),
                                           SizedBox(
                                               height:
