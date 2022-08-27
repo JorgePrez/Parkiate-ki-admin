@@ -45,7 +45,6 @@ import 'package:parkline/providers/serviciosadmin_provider.dart';
 import 'package:parkline/screens/onboard/on_board_screen.dart';
 import 'package:parkline/pages/map_markers.dart';
 import 'package:provider/provider.dart';
-import 'package:parkline/firebase_crud/skillshare.dart';
 import 'package:parkline/models/option_model.dart';
 
 String selectedVehicle = 'assets/images/vehicle/tourism.png';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parkline/firebase_crud/skillshare.dart';
-
+/*
 void main() {
   runApp(MyApp());
 }
@@ -16,3 +15,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+*/
