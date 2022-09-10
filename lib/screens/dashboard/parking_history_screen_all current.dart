@@ -170,7 +170,7 @@ class _ParkingHistoryScreenAllCurrentState
                       left: Dimensions.marginSize,
                       right: Dimensions.marginSize),
                   child: Text(
-                    'Registros de los autos que han usado tu parqueo (usando QR o de forma común)',
+                    'Registros de los autos que actualmente estan dentro de tu parqueo ( QR o común)',
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: Dimensions.largeTextSize,
